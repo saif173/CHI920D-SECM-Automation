@@ -46,18 +46,18 @@ def plot_model(rel_L, rel_I, k_value, rg):
     fig.add_trace(
         go.Scatter(
             x=rel_L,
-            y=model(rel_L, k_value, rg),
+            y=rel_I,
             mode="lines",
-            name="Model"
+            name="Experimental data"
         )
     )
 
     fig.add_trace(
         go.Scatter(
             x=rel_L,
-            y=rel_I,
+            y=model(rel_L, k_value, rg),
             mode="lines",
-            name="Experimental data"
+            name="Model"
         )
     )
 

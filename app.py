@@ -52,7 +52,7 @@ if uploaded_file is not None:
 
     if event.selection.points:
         touch_point = event.selection.points[0]["x"]
-        st.write("Touch point:", touch_point)
+        st.write("Selected zero-point:", touch_point)
 
     rg = st.number_input("Enter value of rg: ")
     a = st.number_input("Enter value of a:")
