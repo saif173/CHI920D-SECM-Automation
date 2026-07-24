@@ -37,11 +37,6 @@ def derivative(x,y):
             derivatives.append((y[i+1]-y[i])/(x[i+1]-x[i]))
     return derivatives
 
-def i_infinity(L_data, I_data):
-    deriv = derivative(L_data,I_data)
-    index = np.argmin(np.abs(deriv)) 
-    i_infinity, L_point = I_data[index],L_data[index]
-    return i_infinity, L_point
 #finding touch point where second derivative is maximum
 
 def find_touchpoint(L_data, I_data):
@@ -51,7 +46,7 @@ def find_touchpoint(L_data, I_data):
     return touch_point
 
 print(find_touchpoint(L_data, I_data))
-print(i_infinity(L_data,I_data))
+
 #normalizing L and I data
 
 def normalize_data(L_data, I_data, touch_point, a):
@@ -75,12 +70,12 @@ rel_L, rel_I = process_data_touchpoint(L_data, I_data, a)
 
 
 #plotting PAC curve
-plt.plot(L_data, I_data, label='PAC curve')
+"""plt.plot(L_data, I_data, label='PAC curve')
 plt.xlabel("L")
 plt.ylabel("I")
 plt.title("PAC Curve")
 plt.grid(True)
-plt.show()
+plt.show()"""
 
 """plt.plot(L_data, I_smooth, label='PAC curve')
 plt.xlabel("L")
@@ -92,12 +87,12 @@ plt.show()"""
 
 # plotting normalized PAC curve
 
-plt.plot(rel_L, rel_I, label='Normalized PAC curve')
+"""plt.plot(rel_L, rel_I, label='Normalized PAC curve')
 plt.xlabel("Relative L")
 plt.ylabel("Relative I")
 plt.title("Normalized PAC Curve")
 plt.grid(True)
-plt.show()
+plt.show()"""
 
 """plt.plot(rel_L1, rel_I1, label='Normalized PAC curve')
 plt.xlabel("Relative L")

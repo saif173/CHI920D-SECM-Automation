@@ -1,7 +1,7 @@
 import process_pac_data
-
+import plotly.graph_objects as go
 import numpy as np
-import matplotlib.pyplot as plt
+
 #negative feedback
 coeffs_negative = {
     1002: (0.13219, 3.37167, 0.8218, -2.34719),
@@ -50,40 +50,29 @@ for Rglass, coeffs in coeffs_negative.items():
 
 def plot(x, y, axis1, axis2, title):
 
-    fig, ax = plt.subplots()
+    fig = go.Figure()
+    fig.add_trace(
+    go.Scatter(
+    x=x,
+    y=y,
+    mode="lines+markers",
+    marker=dict(size=5),
+    ))
 
-    ax.plot(x, y)
+    fig.update_layout(
+        xaxis_title=axis1,
+        yaxis_title=axis2,
+        title=title,
+        template="plotly_white"
+    )
 
-    ax.set_xlabel(axis1)
-    ax.set_ylabel(axis2)
-    ax.set_title(title)
-    ax.grid(True)
+    fig.update_xaxes(range=[min(x), max(x)])
+    fig.update_yaxes(range=[min(y), max(y)])
 
     return fig
 
 
 
-plt.figure(figsize=(10, 6))
-
-# Plot positive feedback curves
-for Rglass, pac in positive_PAC_curves.items():
-    plt.plot(L_values, pac, label=f"Positive R={Rglass}")
-
-# Plot negative feedback curves
-for Rglass, pac in negative_PAC_curves.items():
-    plt.plot(L_values, pac, '--', label=f"Negative R={Rglass}")
-
-plt.plot(process_pac_data.rel_L, process_pac_data.rel_I, label='Real PAC curve for RG = 10', color='black', linewidth=2)
-
-
-plt.xlabel("L")
-plt.ylim(0, 4)
-plt.xlim(0, 10)
-plt.ylabel("I")
-plt.title("PAC Curves for Positive and Negative Feedback")
-plt.legend()
-plt.grid(True)
-plt.show()
 
 
 
