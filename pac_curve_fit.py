@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from scipy.optimize import curve_fit
 from pac_equation import alpha,beta, rg, nf_equation, alpha_is, beta_is
-from process_pac_data import rel_I, rel_L, pure_L,pure_I
+"""from process_pac_data import rel_I, rel_L, pure_L,pure_I
 
 #removes negative values from rel_L and scales size of rel_I
 
@@ -13,7 +13,7 @@ rel_I = rel_I[mask]
 
 mask2 = (pure_L>=0.1)&(pure_L<=2.9)
 pure_L=pure_L[mask2]
-pure_I=pure_I[mask2]
+pure_I=pure_I[mask2]"""
 
 #defining the model
 def model(L, k,rg):
@@ -33,10 +33,10 @@ def find_k(rel_L, rel_I,rg):
 
     return k_value
 
-k= find_k(rel_L,rel_I,rg)
+"""k= find_k(rel_L,rel_I,rg)
 k2= find_k(pure_L,pure_I,rg)
 print("k for experiment is", k)
-print("k for theory is", k2)
+print("k for theory is", k2)"""
 
 #plotting the model against experimental data
 def plot_model(rel_L, rel_I, k_value, rg):
@@ -72,8 +72,8 @@ def plot_model(rel_L, rel_I, k_value, rg):
 
 
 
-pred = model(rel_L, k,rg)
-pred2 = model(pure_L, k2,rg)
+"""pred = model(rel_L, k,rg)
+pred2 = model(pure_L, k2,rg)"""
 
 #finding the rms percentage error between model and data
 def rms_error(rel_I, pred):
@@ -82,7 +82,7 @@ def rms_error(rel_I, pred):
     rmse_percent = 100 * rmse
     return rmse_percent
 
-print("rms error for experimental is", rms_error(rel_I, pred),"%")
+"""print("rms error for experimental is", rms_error(rel_I, pred),"%")
 print("rms error for theoretical is", rms_error(pure_I,pred2),"%" )
 
 plt.plot(rel_L, pred, label = "model")
@@ -114,7 +114,7 @@ plt.axhline(0, color='black', linestyle='--')
 plt.xlabel("Relative L")
 plt.ylabel("Residual")
 plt.title("Residual Plot")
-plt.show()
+plt.show()"""
 
 
 

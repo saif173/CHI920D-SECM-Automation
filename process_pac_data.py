@@ -49,15 +49,18 @@ print(find_touchpoint(L_data, I_data))
 
 #normalizing L and I data
 
-def normalize_data(L_data, I_data, touch_point, a):
-    rel_L = (L_data - touch_point) / a
-    index2 = np.argmin(np.abs(rel_L - 6))
-    I_infinity =I_data[index2]
+def flip_data(L_data):
+    return np.abs(L_data - L_data[-1])
+
+def normalize_data(L_data, I_data, touch_point, a, I_infinity):
+    rel_L =(L_data - touch_point) / a
+    #index2 = np.argmin(np.abs(rel_L - 5))
+    #I_infinity =I_data[index2]
     rel_I = I_data/I_infinity
     
     return rel_L, rel_I
 
-def process_data_touchpoint(L_data, I_data, a):
+"""def process_data_touchpoint(L_data, I_data, a):
     touch_point = find_touchpoint(L_data, I_data)
     return normalize_data(L_data, I_data, touch_point, a)
 
@@ -65,7 +68,7 @@ def process_data_touchpoint(L_data, I_data, a):
 
 rel_L, rel_I = process_data_touchpoint(L_data, I_data, a)
 #rel_L1,rel_I1 = process_data_touchpoint(L_data,I_smooth,a)
-
+"""
 
 
 

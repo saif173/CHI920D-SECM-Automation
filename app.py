@@ -3,7 +3,7 @@ from streamlit_plotly_events import plotly_events
 import streamlit as st
 import numpy as np
 import pandas as pd
-from process_pac_data import process_data_touchpoint, normalize_data
+from process_pac_data import normalize_data, flip_data
 from pac_plotting import plot
 from pac_curve_fit import model, plot_model, find_k, rms_error
 
@@ -39,11 +39,24 @@ if uploaded_file is not None:
 
     L_data = data.iloc[:, 0].to_numpy()
     I_data = data.iloc[:, 1].to_numpy()
+    L_data = flip_data(L_data)
+
+    rg = st.number_input("Enter value of rg: ")
+    a = st.number_input("Enter value of a:")
 
     fig1 = plot(L_data, I_data, "Distance", "Current", "PAC Curve")
-    st.write("Click a data-point to select a zero-point")
+    st.write("Click a data-point to select a zero-point, click-again to select i-infinity point. (Or type directly into box)")
 
-    touch_point = None
+    if "click_count" not in st.session_state:
+        st.session_state.click_count = 0
+
+    if "touch_point" not in st.session_state:
+        st.session_state.touch_point = None
+
+    if "i_infi" not in st.session_state:
+        st.session_state.i_infi = None
+
+
     event = st.plotly_chart(
     fig1,
     on_select="rerun",
@@ -51,19 +64,41 @@ if uploaded_file is not None:
     )
 
     if event.selection.points:
-        touch_point = event.selection.points[0]["x"]
-        st.write("Selected zero-point:", touch_point)
+        point = event.selection.points[0]
 
-    rg = st.number_input("Enter value of rg: ")
-    a = st.number_input("Enter value of a:")
+        if st.session_state.click_count % 2 == 0:
+            st.session_state.touch_point = point["x"]
 
+        else:
+            st.session_state.i_infi = point["y"]
+
+        st.session_state.click_count += 1
+
+    st.session_state.touch_point = st.number_input(
+    "Selected zero-point",
+    value=float(st.session_state.touch_point)
+    if st.session_state.touch_point is not None else 0.0
+    )
+    i_infi_text = st.text_input(
+    "Selected I-infinity",
+    value=str(st.session_state.i_infi) if st.session_state.i_infi is not None else "0"
+    )
+
+    try:
+        st.session_state.i_infi = float(i_infi_text)
+    except ValueError:
+        st.error("Please enter a valid number (e.g. 0.000001 or 1e-6).")
+
+    touch_point = st.session_state.touch_point
+    i_infi = st.session_state.i_infi
     
+   
     if (a > 0) & (rg >0) & (touch_point is not None):
-        rel_L, rel_I = normalize_data(L_data, I_data, touch_point, a)
+        rel_L, rel_I = normalize_data(L_data, I_data, touch_point, a, i_infi)
 
-        mask = (rel_L > 0) & (rel_L < 3) #removes L=0 to avoid numerical instability
-        rel_L = rel_L[mask]
-        rel_I = rel_I[mask]
+        mask= (rel_L>0)&(rel_L<3)
+        rel_L=rel_L[mask]
+        rel_I=rel_I[mask]
 
         k=find_k(rel_L,rel_I,rg)
         pred = model(rel_L,k,rg)
