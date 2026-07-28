@@ -73,6 +73,8 @@ def plot_model(rel_L, rel_I, k_value, rg):
     return fig
 
 def find_i_infi(L_data, I_data, touch_point, a, rg):
+    """Finds the value of the bulk current 
+    that gives a curve-fit with the minimum error"""
     L_data = flip_data(L_data)
     rel_L = (L_data - touch_point) / a
     mask = (rel_L>0)&(rel_L<3)
@@ -100,7 +102,8 @@ pred2 = model(pure_L, k2,rg)"""
 
 #finding the rms percentage error between model and data
 def rms_error(rel_I, pred):
-    """Finds the root-mean-square percentage error"""
+    """Finds the root-mean-square percentage error between theoretical model
+    and experimental data"""
 
     rmse = np.sqrt(np.mean(((rel_I - pred)/rel_I)**2))
     rmse_percent = 100 * rmse
