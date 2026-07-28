@@ -56,9 +56,10 @@ def normalize_data(L_data, I_data, touch_point, a, I_infinity):
     rel_L =(L_data - touch_point) / a
     #index2 = np.argmin(np.abs(rel_L - 5))
     #I_infinity =I_data[index2]
-    rel_I = I_data/I_infinity
+    rel_I = (I_data/I_infinity)
     
     return rel_L, rel_I
+
 
 """def process_data_touchpoint(L_data, I_data, a):
     touch_point = find_touchpoint(L_data, I_data)

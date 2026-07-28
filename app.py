@@ -37,9 +37,9 @@ if uploaded_file is not None:
         header=None
     )
 
-    L_data = data.iloc[:, 0].to_numpy()
+    L_data = data.iloc[:, 0].to_numpy()  #parses data from file
     I_data = data.iloc[:, 1].to_numpy()
-    L_data = flip_data(L_data)
+    L_data = flip_data(L_data) #flips the raw data to reflect shape of theoretical curve
 
     rg = st.number_input("Enter value of rg: ")
     a = st.number_input("Enter value of a:")
@@ -47,14 +47,15 @@ if uploaded_file is not None:
     fig1 = plot(L_data, I_data, "Distance", "Current", "PAC Curve")
     st.write("Click a data-point to select a zero-point, click-again to select i-infinity point. (Or type directly into box)")
 
+    #interactive plot allows user to select touchpoint and i-infinity
     if "click_count" not in st.session_state:
         st.session_state.click_count = 0
 
     if "touch_point" not in st.session_state:
-        st.session_state.touch_point = None
+        st.session_state.touch_point = 0
 
     if "i_infi" not in st.session_state:
-        st.session_state.i_infi = None
+        st.session_state.i_infi = "0"
 
 
     event = st.plotly_chart(
@@ -62,46 +63,54 @@ if uploaded_file is not None:
     on_select="rerun",
     selection_mode="points"
     )
+    if "last_point_index" not in st.session_state:
+        st.session_state.last_point_index = None
 
     if event.selection.points:
         point = event.selection.points[0]
+        point_index = point["point_index"]
 
-        if st.session_state.click_count % 2 == 0:
-            st.session_state.touch_point = point["x"]
+        if point_index != st.session_state.last_point_index: #ensures that entering values into box doesnt increment touch counter
+            st.session_state.last_point_index = point_index
 
-        else:
-            st.session_state.i_infi = point["y"]
+            if st.session_state.click_count % 2 == 0: #first click selects touchpoint, second selects i-infinity, then third is touch-point etc.
+                st.session_state.touch_point = point["x"]
 
-        st.session_state.click_count += 1
+            else:
+                st.session_state.i_infi = str(point["y"])
 
-    st.session_state.touch_point = st.number_input(
+            st.session_state.click_count += 1
+
+    #allows user to enter items into the boxes by typing too
+    st.number_input(
     "Selected zero-point",
-    value=float(st.session_state.touch_point)
-    if st.session_state.touch_point is not None else 0.0
+    key="touch_point"
     )
-    i_infi_text = st.text_input(
+
+    st.text_input(
     "Selected I-infinity",
-    value=str(st.session_state.i_infi) if st.session_state.i_infi is not None else "0"
+    key="i_infi"
     )
 
     try:
-        st.session_state.i_infi = float(i_infi_text)
+        i_infi = float(st.session_state.i_infi)
     except ValueError:
-        st.error("Please enter a valid number (e.g. 0.000001 or 1e-6).")
+        st.error("Invalid I-infinity value")
+        i_infi = None
+
 
     touch_point = st.session_state.touch_point
-    i_infi = st.session_state.i_infi
     
    
     if (a > 0) & (rg >0) & (touch_point is not None):
         rel_L, rel_I = normalize_data(L_data, I_data, touch_point, a, i_infi)
 
-        mask= (rel_L>0)&(rel_L<3)
+        mask= (rel_L>0)&(rel_L<3) #sets range of 0 to 3 for the normalised curve. removes x=0 to avoid numerical instability
         rel_L=rel_L[mask]
         rel_I=rel_I[mask]
 
-        k=find_k(rel_L,rel_I,rg)
-        pred = model(rel_L,k,rg)
+        k=find_k(rel_L,rel_I,rg) 
+        pred = model(rel_L,k,rg) 
         rmse = rms_error(rel_I,pred)
 
         #define and show plots
