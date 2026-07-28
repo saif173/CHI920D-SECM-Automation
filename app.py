@@ -4,7 +4,10 @@ import pandas as pd
 from process_pac_data import normalize_data, flip_data
 from pac_plotting import plot
 from pac_curve_fit import model, plot_model, find_k, rms_error
-from pac_selection import select_params
+from pac_selection import select_params, select_touchpoint
+from pac_curve_fit import find_i_infi
+
+col1,col2 = st.columns(2)
 
 
 # app title and description
@@ -39,14 +42,15 @@ if uploaded_file is not None:
     L_data = data.iloc[:, 0].to_numpy()  #parses data from file
     I_data = data.iloc[:, 1].to_numpy()
     L_data = flip_data(L_data) #flips the raw data to reflect shape of theoretical curve
-
+    
     rg = st.number_input("Enter value of rg: ")
     a = st.number_input("Enter value of a:")
 
     fig1 = plot(L_data, I_data, "Distance", "Current", "PAC Curve")
-    st.write("Click a data-point to select a zero-point, click-again to select i-infinity point. (Or type directly into box)")
+    st.write("Click a data-point to select a zero-point")
 
-    touch_point, i_infi = select_params(fig1)
+    touch_point = select_touchpoint(fig1)
+    i_infi = find_i_infi(L_data, I_data, touch_point, a, rg)
     
    
     if (a > 0) & (rg >0) & (touch_point is not None) & (i_infi is not None):
@@ -63,6 +67,7 @@ if uploaded_file is not None:
         st.plotly_chart(fig2)
         st.plotly_chart(fig3)
         st.write("k =", k)
+        st.write("Error is minimised when bulk current is estimated as:", i_infi)
         st.write("RMS error =", rmse,"%")
     else:
         st.write("Error: a and rg must be a number greater than 0")

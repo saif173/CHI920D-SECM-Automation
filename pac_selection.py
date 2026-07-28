@@ -65,3 +65,21 @@ def select_params(fig):
 
 
     return st.session_state.touch_point, i_infi
+
+
+
+def select_touchpoint(fig):
+
+    touch_point = None
+
+    event = st.plotly_chart(
+        fig,
+        on_select="rerun",
+        selection_mode="points"
+    )
+
+    if event.selection.points:
+        touch_point = event.selection.points[0]["x"]
+    st.write("Selected zero-point is:", touch_point)
+
+    return touch_point

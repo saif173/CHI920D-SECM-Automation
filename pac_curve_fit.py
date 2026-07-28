@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from scipy.optimize import curve_fit
 from pac_equation import alpha,beta, rg, nf_equation, alpha_is, beta_is
+from process_pac_data import flip_data
 """from process_pac_data import rel_I, rel_L, pure_L,pure_I
 
 #removes negative values from rel_L and scales size of rel_I
@@ -17,6 +18,7 @@ pure_I=pure_I[mask2]"""
 
 #defining the model
 def model(L, k,rg):
+    """Defines the theoretical model"""
     nf_curve = nf_equation(L, rg)
     return (alpha_is(rg) + (np.pi/(beta_is(rg)*4*np.arctan(L+1/k))) + (1 - alpha_is(rg) - 1/(2*beta_is(rg))) * ((2/np.pi) * np.arctan(L+1/k)) 
             + (nf_curve - 1)/((1+2.47*(rg**0.31)*L*k)*(1+L**(0.006*rg+0.113)*k**(-0.0236*rg + 0.91))))
@@ -40,7 +42,7 @@ print("k for theory is", k2)"""
 
 #plotting the model against experimental data
 def plot_model(rel_L, rel_I, k_value, rg):
-
+    """Uses plotly to plot the experimental data against the model"""
     fig = go.Figure()
 
     fig.add_trace(
@@ -70,6 +72,27 @@ def plot_model(rel_L, rel_I, k_value, rg):
 
     return fig
 
+def find_i_infi(L_data, I_data, touch_point, a, rg):
+    L_data = flip_data(L_data)
+    rel_L = (L_data - touch_point) / a
+    mask = (rel_L>0)&(rel_L<3)
+    rel_L=rel_L[mask]
+    i_values = np.linspace(1e-9,1e-8,100)
+    error_list=[]
+
+    for i in i_values:
+        rel_I = (I_data/i)[mask]
+        k = find_k(rel_L, rel_I, rg)
+        pred = model(rel_L, k, rg)
+        error = rms_error(rel_I,pred)
+        error_list.append(error)
+
+    index = np.argmin(error_list)
+    i_infi = i_values[index]
+
+    return i_infi
+        
+
 
 
 """pred = model(rel_L, k,rg)
@@ -77,6 +100,7 @@ pred2 = model(pure_L, k2,rg)"""
 
 #finding the rms percentage error between model and data
 def rms_error(rel_I, pred):
+    """Finds the root-mean-square percentage error"""
 
     rmse = np.sqrt(np.mean(((rel_I - pred)/rel_I)**2))
     rmse_percent = 100 * rmse
