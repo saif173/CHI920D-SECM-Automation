@@ -1,11 +1,10 @@
 import io
-from streamlit_plotly_events import plotly_events
 import streamlit as st
-import numpy as np
 import pandas as pd
 from process_pac_data import normalize_data, flip_data
 from pac_plotting import plot
 from pac_curve_fit import model, plot_model, find_k, rms_error
+from pac_selection import select_params
 
 
 # app title and description
@@ -47,69 +46,13 @@ if uploaded_file is not None:
     fig1 = plot(L_data, I_data, "Distance", "Current", "PAC Curve")
     st.write("Click a data-point to select a zero-point, click-again to select i-infinity point. (Or type directly into box)")
 
-    #interactive plot allows user to select touchpoint and i-infinity
-    if "click_count" not in st.session_state:
-        st.session_state.click_count = 0
-
-    if "touch_point" not in st.session_state:
-        st.session_state.touch_point = 0
-
-    if "i_infi" not in st.session_state:
-        st.session_state.i_infi = "0"
-
-
-    event = st.plotly_chart(
-    fig1,
-    on_select="rerun",
-    selection_mode="points"
-    )
-    if "last_point_index" not in st.session_state:
-        st.session_state.last_point_index = None
-
-    if event.selection.points:
-        point = event.selection.points[0]
-        point_index = point["point_index"]
-
-        if point_index != st.session_state.last_point_index: #ensures that entering values into box doesnt increment touch counter
-            st.session_state.last_point_index = point_index
-
-            if st.session_state.click_count % 2 == 0: #first click selects touchpoint, second selects i-infinity, then third is touch-point etc.
-                st.session_state.touch_point = point["x"]
-
-            else:
-                st.session_state.i_infi = str(point["y"])
-
-            st.session_state.click_count += 1
-
-    #allows user to enter items into the boxes by typing too
-    st.number_input(
-    "Selected zero-point",
-    key="touch_point"
-    )
-
-    st.text_input(
-    "Selected I-infinity",
-    key="i_infi"
-    )
-
-    try:
-        i_infi = float(st.session_state.i_infi)
-    except ValueError:
-        st.error("Invalid I-infinity value")
-        i_infi = None
-
-
-    touch_point = st.session_state.touch_point
+    touch_point, i_infi = select_params(fig1)
     
    
-    if (a > 0) & (rg >0) & (touch_point is not None):
+    if (a > 0) & (rg >0) & (touch_point is not None) & (i_infi is not None):
         rel_L, rel_I = normalize_data(L_data, I_data, touch_point, a, i_infi)
 
-        mask= (rel_L>0)&(rel_L<3) #sets range of 0 to 3 for the normalised curve. removes x=0 to avoid numerical instability
-        rel_L=rel_L[mask]
-        rel_I=rel_I[mask]
-
-        k=find_k(rel_L,rel_I,rg) 
+        k=find_k(rel_L,rel_I,rg)
         pred = model(rel_L,k,rg) 
         rmse = rms_error(rel_I,pred)
 
