@@ -46,7 +46,7 @@ if uploaded_file is not None:
     rg = st.number_input("Enter value of rg: ")
     a = st.number_input("Enter value of a:")
 
-    fig1 = plot(L_data, I_data, "Distance", "Current", "PAC Curve")
+    fig1 = plot(L_data, I_data, "Distance/micrometers (arbitrary)", "Current/amps", "PAC Curve")
     st.write("Click a data-point to select a zero-point")
 
     touch_point = select_touchpoint(fig1)
@@ -67,7 +67,7 @@ if uploaded_file is not None:
         st.plotly_chart(fig2)
         st.plotly_chart(fig3)
         st.write("k =", k)
-        st.write("Error is minimised when bulk current is estimated as:", i_infi)
+        st.write("Error is minimised when bulk current is estimated as:", i_infi, "Amperes")
         st.write("RMS error =", rmse,"%")
     else:
         st.write("Error: a and rg must be a number greater than 0")
