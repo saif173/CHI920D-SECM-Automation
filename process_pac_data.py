@@ -57,7 +57,7 @@ def normalize_data(L_data, I_data, touch_point, a, I_infinity):
     """Normalises data based on touch-point (zero-point) and bulk-current (I-infinity)"""
     rel_L =(L_data - touch_point) / a
     rel_I = (I_data/I_infinity)
-    mask= (rel_L>0)&(rel_L<3) #sets range of 0 to 3 for the normalised curve. removes x=0 to avoid numerical instability
+    mask= (rel_L>0)&(rel_L<5) #sets range of 0 to 5 for the normalised curve. removes x=0 to avoid numerical instability
     rel_L=rel_L[mask]
     rel_I=rel_I[mask]
     
