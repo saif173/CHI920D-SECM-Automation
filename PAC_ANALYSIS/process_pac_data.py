@@ -5,8 +5,8 @@ from pathlib import Path
 
 folder = Path(__file__).parent
 
-L_data, I_data = np.loadtxt(folder / "gold_data.txt", unpack=True)
-pure_L, pure_I = np.loadtxt(folder / "n_f.txt", unpack=True)
+"""L_data, I_data = np.loadtxt(folder / "gold_data.txt", unpack=True)
+pure_L, pure_I = np.loadtxt(folder / "n_f.txt", unpack=True)"""
 
 a = 5
 
@@ -45,7 +45,7 @@ def find_touchpoint(L_data, I_data):
     touch_point = L_data[index +1]
     return touch_point
 
-print(find_touchpoint(L_data, I_data))
+"""print(find_touchpoint(L_data, I_data))"""
 
 #normalizing L and I data
 

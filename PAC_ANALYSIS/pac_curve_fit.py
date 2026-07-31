@@ -28,7 +28,7 @@ def find_k(rel_L, rel_I,rg):
     """
     Fits model and returns k value
     """
-    params, covariance = curve_fit(lambda L, k: model(L, k, rg), rel_L, rel_I, p0 = 3)
+    params, covariance = curve_fit(lambda L, k: model(L, k, rg), rel_L, rel_I)
 
 
     k_value = params[0]

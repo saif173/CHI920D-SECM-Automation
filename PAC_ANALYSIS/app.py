@@ -4,7 +4,7 @@ import pandas as pd
 from process_pac_data import normalize_data, flip_data
 from pac_plotting import plot
 from pac_curve_fit import model, plot_model, find_k, rms_error
-from pac_selection import select_params, select_touchpoint
+from pac_selection import select_touchpoint
 from pac_curve_fit import find_i_infi
 
 col1,col2 = st.columns(2)
@@ -20,7 +20,6 @@ uploaded_file = st.file_uploader("Choose a text or CSV file", type=["txt", "csv"
 
 if uploaded_file is not None:
     lines = uploaded_file.getvalue().decode("utf-8").splitlines()
-
     data_lines = []
     for line in lines:
         line = line.replace(",", " ")   # remove commas
