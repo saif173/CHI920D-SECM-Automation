@@ -34,6 +34,7 @@ def stop_distances(positions):
      return ordered_pos, stop_distances
 
 
+
 def offsets(ordered_pos, stop_distances):
     offset1 = stop_distances[1]-stop_distances[0]
     offset2=stop_distances[2]-stop_distances[0]
