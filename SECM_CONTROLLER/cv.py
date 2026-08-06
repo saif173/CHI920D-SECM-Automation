@@ -15,8 +15,8 @@ with col1:
     scan_rate=st.number_input("Scan rate (V/s) (-1e-6 to 1e4)", min_value=1e-6, max_value=1e4,format="%.2e")
     sweep_segments=st.number_input("Sweep segments (-1e6 to 1e6)", min_value=1.0, max_value=1e6, value=1.0, step=1.0)
     sample_interval=st.number_input("Sample interval (s) (-1e-3 to 0.064)", min_value=1e-3, max_value=0.064, value=0.001, step=0.001, format="%.4f")
-    quiet_time=st.number_input("Quiet time (s) (0.0 to 1e5)", min_value=0.0, max_value=1e5, value=0.0, step=0.1)
-    sensitivity=st.number_input("Sensitivity (A/V) (-1e-12 to 0.1)", min_value=1e-12, max_value=0.1, key="sensitivity1", format="%.2e" )
+    quiet_time=st.number_input("Quiet time (s) (0.0 to 1e5)", min_value=0.0, max_value=1e5, value=2.0, step=0.1)
+    sensitivity=st.number_input("Sensitivity (A/V) (-1e-12 to 0.1)", min_value=1e-12, max_value=0.1, value=1e-9,key="sensitivity1", format="%.2e" )
     auto_sens=st.checkbox("Auto Sensitivity")
     enable_final_e=st.checkbox("Allow potential scan to end at Final E")
     aux_signal_rec=st.checkbox("Record auxiliary signal")
@@ -44,3 +44,4 @@ if st.button("Submit Parameters"):
         "auto_sens": auto_sens, "enable_final_e": enable_final_e, "aux_signal_rec": aux_signal_rec, "potential": potential, 
         "diff_scan": diff_scan, "diff_e": diff_e, "sensitivity2": sensitivity2, "off": off, "constant_e": constant_e, "scan": scan}
     st.write("Parameters submitted successfully!")
+

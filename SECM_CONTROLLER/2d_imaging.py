@@ -1,6 +1,7 @@
 import sys
 from position_leveler import scan_mode, moving, stop_distances, offsets
-
+from pac_analysis.process_pac_data import normalize_data
+from pac_analysis.pac_curve_fit import find_k_deluxe
 
 
 
@@ -27,3 +28,4 @@ def two_d_scan(positions):
         moving(positions, (position%len(positions))+1)
 
     return positions_and_is
+

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from scipy.optimize import curve_fit
 from pac_equation import alpha,beta, rg, nf_equation, alpha_is, beta_is
-from process_pac_data import flip_data
+from process_pac_data import flip_data, normalize_data
 """from process_pac_data import rel_I, rel_L, pure_L,pure_I
 
 #removes negative values from rel_L and scales size of rel_I
@@ -94,6 +94,13 @@ def find_i_infi(L_data, I_data, touch_point, a, rg):
 
     return i_infi
         
+def find_k_deluxe(L_data, I_data, rg , a, zero_point):
+    L_data_flip = flip_data(L_data)
+    i_infi = find_i_infi(L_data_flip,I_data,zero_point,a,rg)
+    rel_L, rel_I = normalize_data(L_data, I_data, zero_point, a, i_infi)
+    k = find_k(rel_L, rel_I,rg)
+
+    return k
 
 
 
