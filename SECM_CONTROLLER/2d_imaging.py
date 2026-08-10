@@ -19,7 +19,6 @@ def two_d_scan_k(positions, rg, a):
     
     return positions_and_ks
 
-
 def two_d_scan(positions):
     positions_and_is = {}
     moving(positions, position1)
@@ -28,4 +27,6 @@ def two_d_scan(positions):
         moving(positions, (position%len(positions))+1)
 
     return positions_and_is
+
+
 

@@ -1,6 +1,7 @@
 import io
 import streamlit as st
 import pandas as pd
+from file_parser import parse_file_st
 from process_pac_data import normalize_data, flip_data
 from pac_plotting import plot
 from pac_curve_fit import model, plot_model, find_k, rms_error
@@ -19,27 +20,7 @@ st.write("Upload your experiment text file")
 uploaded_file = st.file_uploader("Choose a text or CSV file", type=["txt", "csv"])
 
 if uploaded_file is not None:
-    lines = uploaded_file.getvalue().decode("utf-8").splitlines()
-    data_lines = []
-    for line in lines:
-        line = line.replace(",", " ")   # remove commas
-        if not line.strip():
-            continue
-
-        try:
-            float(line.split()[0])
-            data_lines.append(line)
-        except ValueError:
-            pass
-
-    data = pd.read_csv(
-        io.StringIO("\n".join(data_lines)),
-        sep=r"\s+",
-        header=None
-    )
-
-    L_data = data.iloc[:, 0].to_numpy()  #parses data from file
-    I_data = data.iloc[:, 1].to_numpy()
+    L_data, I_data = parse_file_st(uploaded_file)
     L_data = flip_data(L_data) #flips the raw data to reflect shape of theoretical curve
     
     rg = st.number_input("Enter value of rg: ")

@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from scipy.optimize import curve_fit
-from pac_equation import alpha,beta, rg, nf_equation, alpha_is, beta_is
-from process_pac_data import flip_data, normalize_data
+from pac_analysis.pac_equation import alpha,beta, rg, nf_equation, alpha_is, beta_is
+from pac_analysis.process_pac_data import flip_data, normalize_data
 """from process_pac_data import rel_I, rel_L, pure_L,pure_I
 
 #removes negative values from rel_L and scales size of rel_I

@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from pac_analysis.file_parser import parse_file
+
 
 
 
@@ -42,11 +44,12 @@ def pac_commands(parameters):
         f"iabs:{parameters['current_abs']}",
         f"maxincr:{parameters['max_incr']}",
         f"withdraw:{parameters['withdraw']}",
+        f"incrtime:{parameters['incrtime']}",
         ]
     if parameters['epon'] == True:
         commands.append("epon")
         commands.append(f"ep:{parameters['pulse_pot']}")
-    elif parameters['epoff'] == True:
+    elif parameters['epon'] == False:
         commands.append("epoff")
     if parameters['e2on'] == True:
         commands.append("e2on")
@@ -57,12 +60,39 @@ def pac_commands(parameters):
         commands.append("i2on")
     elif parameters['i2on'] == False:
         commands.append("i2off")
-    if parameters['iratioon'] == True:
+    if parameters['probe_stop'] == "Current ratio":
         commands.append("iratioon")
-    if parameters['iabson'] == True:
-        commands.append("iabson")   
-    commands.append(f"run")
+    elif parameters['probe_stop'] == "Absolute current":
+        commands.append("iabson")  
+    commands = commands + [f"run", f"folder: C:\chi\pac_data", f"tsave:pac_data"]
+
     return commands
+
+def position_leveling_commands(parameters):
+    commands = (pac_commands(parameters) 
+    + [f"folder:C:\chi\pos_level", f"tsave:pos1", f"x:1500", f"zgoto:10000"]
+    + pac_commands(parameters)
+    + [f"folder:C:\chi\pos_level", f"tsave:pos2", f"x:-750", f"y:1500", f"zgoto:10000"]
+    +pac_commands(parameters)
+    + [f"folder:C:\chi\pos_level", f"tsave:pos3", f"x:-750", f"y:-1500", f"zgoto:10000"])
+
+    return commands
+
+
+def position_leveling(file1, file2, file3):
+    #parse the files to get the stop distances
+    stop1 = parse_file(file1)[-1]
+    stop2 = parse_file(file2)[-1]
+    stop3 = parse_file(file3)[-1]
+
+    #calculate the offsets
+    offset1 = stop2 - stop1
+    offset2 = stop3 - stop1
+
+    print("Height of position 2 is off by", offset1, "relative to position 1")
+    print("Height of position 3 is off by", offset2, "relative to position 1")
+
+    return offset1, offset2
 
 
 def run_chi_macro(macro_commands):
@@ -71,7 +101,7 @@ def run_chi_macro(macro_commands):
     macro_file = r"C:\chi\test.mcr"
     
     with open(r"C:\chi\test.mcr", "wb") as f:
-        f.write(b"\xff\x00\x00\x00")
+        f.write(b"\xff\xff\x00\x00")
         f.write("\r\n".join(macro_commands).encode("ascii"))
 
     # run the subprocess using the variables
@@ -90,6 +120,7 @@ def run_chi_macro(macro_commands):
 
 
 
+
 #subprocess.run([r"C:\chi\chi920d.exe", "/runmacro:C:\\chi\\test.mcr"], check=True)
 #subprocess.run([r"C:\chi\chi920d.exe", "/runmacro:C:\\chi\\cv_ideal.mcr"], check=True)
 
@@ -101,8 +132,5 @@ def run_chi_macro(macro_commands):
 """with open(r"C:\chi\test.mcr", "rb") as f:
     print(f.read(40))
 
-with open(r"C:\chi\cv_ideal2.mcr", "rb") as f:
-    print(f.read(40))
-
-text = b"tech:cv\r\neh:0.3\r"
-print(len(text))"""
+with open(r"C:\chi\macro\pop.mcr", "rb") as f:
+    print(f.read(40))"""
