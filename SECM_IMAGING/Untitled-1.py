@@ -1,3 +1,0 @@
-
-def surface_map():
-    

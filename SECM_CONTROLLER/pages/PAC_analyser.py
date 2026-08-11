@@ -16,8 +16,9 @@ st.title("Probe Approach Curve Analyzer")
 st.write("Upload your experiment text file")
 
 
-# file uploader
-uploaded_file = "C:\chi\pac_data\pac_data.txt"
+
+uploaded_file = rf"C:\chi\pac_data\pac.txt"
+
 
 L_data, I_data = parse_file(uploaded_file)
 L_data = flip_data(L_data) #flips the raw data to reflect shape of theoretical curve
