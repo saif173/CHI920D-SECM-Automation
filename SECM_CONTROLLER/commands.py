@@ -1,7 +1,9 @@
 import os
 import subprocess
-
+import numpy as np
+import matplotlib as plt
 from pac_analysis.file_parser import parse_file
+from pac_analysis.pac_curve_fit import find_k_deluxe
 
 
 
@@ -10,6 +12,83 @@ test = ["tech:cv","eh:0.3","ei:0.1","run"]
 print(test)
 test2 = ["x:3000", "xreset"]
 empty = ["run"]
+
+
+def k_map_commands(parameters):
+    commands = []
+
+    commands.append("zgoto:17000")
+
+    for y in range(3):
+        for x in range(3):
+
+            # Run PAC
+            commands += pac_commands(parameters)
+
+            # Save result
+            commands += [
+            f"folder:{parameters['output_folder']}",
+            f"tsave:pos_{x}_{y}"
+            ]
+
+            # Move to next point in row
+            if x < 2:
+                commands.append("x:300")
+
+        # Move to beginning of next row
+        if y < 2:
+            commands.append("x:-600")
+            commands.append("y:300")
+
+    return commands
+
+
+
+def k_map(folder, rg, a, box_length):
+    k_values = {}
+
+    for i, file in enumerate(folder):
+
+        L_data, I_data = parse_file(file)
+
+        k = find_k_deluxe(L_data, I_data, rg, a, L_data[-1])
+
+        x = i % box_length
+        y = i // box_length
+
+        k_values[(x, y)] = k
+
+    return k_values
+
+def plot_k_map(k_values, box_length):
+
+    # Create array
+    k_array = np.full((box_length, box_length), np.nan)
+
+    # Put each k value into the correct position
+    for (x, y), k in k_values.items():
+        k_array[y, x] = k
+
+    # Plot
+    fig, ax = plt.subplots()
+
+    im = ax.imshow(
+        k_array,
+        origin="lower",
+        extent=[0, 199, 0, 199],
+        aspect="equal"
+    )
+
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_title("2D k Map")
+
+    fig.colorbar(im, ax=ax, label="k")
+
+    return fig
+
+    
+
 
 def cv_commands(parameters):
     commands = [f"tech:cv",
@@ -64,7 +143,7 @@ def pac_commands(parameters):
         commands.append("iratioon")
     elif parameters['probe_stop'] == "Absolute current":
         commands.append("iabson")  
-    commands = commands + [f"run", f"folder: C:\chi\pac_data", f"tsave:{parameters['filename']}"]
+    commands = commands + [f"run"]
 
     return commands
 
@@ -79,6 +158,7 @@ def position_leveling_commands(parameters):
         + pac_commands(parameters)
         + [r"folder:C:\chi\pos_level", "tsave:pos3", "zgoto:17000", "x:-750", "y:-1500"]
     )
+
 
 
 def position_leveling(file1, file2, file3):
@@ -166,7 +246,7 @@ def secm_commands(parameters):
     elif parameters['originon']==False:
         commands.append("originoff")
 
-    commands = commands + [f"run", f"folder: C:\chi\secm_data", f"tsave:{parameters['filename']}"]
+    commands = commands + [f"run", f"fileoverride", f"folder:C:\chi\secm_data", f"tsave:{parameters['filename']}"]
 
     return commands
 

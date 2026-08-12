@@ -1,7 +1,12 @@
 import subprocess
-
+import tkinter as tk
 import streamlit as st
-from secm_controller.commands import cv_commands, pac_commands, position_leveling, position_leveling_commands, run_chi_macro, secm_commands
+
+from folder_select import folder_picker
+
+from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands, k_map, plot_k_map
+
+
 
 
 st.set_page_config(
@@ -13,7 +18,7 @@ st.set_page_config(
 
 st.title("SECM Controller")
 
-mode = st.selectbox("Select Mode", ["Cyclic Voltammetry", "Position Leveling", "PAC Analysis", "SECM Scan"])
+mode = st.selectbox("Select Mode", ["Cyclic Voltammetry", "K-Map", "PAC Analysis", "SECM Scan"])
 
 if mode == "Cyclic Voltammetry":
     st.title("Cyclic Voltammetry Parameters")
@@ -182,10 +187,10 @@ if mode == "PAC Analysis":
             st.subheader("Stop Parameters")
 
             current_ratio = st.number_input(
-                "Current ratio (I2/I1)",
+                "Current ratio (%)",
                 min_value=1.0,
                 max_value=400.0,
-                value=1.0,
+                value=50.0,
                 step=0.01,
                 key="pac_current_ratio"
             )
@@ -275,7 +280,7 @@ if mode == "PAC Analysis":
 
         st.subheader("Experiment Controls")
 
-        run_col1, run_col2 = st.columns(2)
+        run_col1, run_col2, run_col3 = st.columns(3)
 
         with run_col1:
             if st.button(
@@ -308,9 +313,37 @@ if mode == "PAC Analysis":
                     file1, file2, file3
                         )
 
-        st.success("Position leveling complete!")
 
-        st.subheader("Position Leveling Results")
+        with run_col3:
+
+            st.subheader("K-Map")
+
+            output_folder = folder_picker("K-map output folder")
+
+            if st.button(
+                "▶ Run K-Map",
+                use_container_width=True
+                ):
+
+                if not output_folder:
+                    st.warning("Please select an output folder first.")
+
+                elif "pac_parameters" not in st.session_state:
+                    st.warning("Please submit the PAC parameters first.")
+
+                else:
+                    st.session_state.pac_parameters["output_folder"] = output_folder
+
+                    with st.spinner("Running K-map..."):
+                        run_chi_macro(
+                        k_map_commands(st.session_state.pac_parameters)
+                             )
+
+                        k_values = k_map(output_folder,rg=10,a=5,box_length=3)
+
+                        fig = plot_k_map(k_values,box_length=5)
+
+                        st.pyplot(fig)
 
         col1, col2 = st.columns(2)
 
@@ -712,5 +745,7 @@ if mode == "SECM Scan":
                     st.session_state.secm_parameters
                 )
             )
+
+
 
 
