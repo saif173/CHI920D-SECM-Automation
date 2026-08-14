@@ -4,7 +4,7 @@ import streamlit as st
 
 from folder_select import folder_picker
 
-from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands, k_map, plot_k_map
+from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands
 
 
 
@@ -280,19 +280,8 @@ if mode == "PAC Analysis":
 
         st.subheader("Experiment Controls")
 
-        run_col1, run_col2, run_col3 = st.columns(3)
+        run_col1, run_col2 = st.columns(2)
 
-        with run_col1:
-            if st.button(
-                "▶ Run PAC Analysis",
-                type="primary",
-                use_container_width=True
-            ):
-                run_chi_macro(
-                    pac_commands(
-                        st.session_state.pac_parameters
-                    )
-                )
 
         with run_col2:
             if st.button("⚙ Run Position Leveling", use_container_width=True
@@ -314,36 +303,30 @@ if mode == "PAC Analysis":
                         )
 
 
-        with run_col3:
+        with run_col1:
 
-            st.subheader("K-Map")
+            st.subheader("PAC Analysis")
 
-            output_folder = folder_picker("K-map output folder")
+            folder = folder_picker("Select an output folder")
 
             if st.button(
-                "▶ Run K-Map",
+                "▶ Run PAC Analysis",
                 use_container_width=True
                 ):
 
-                if not output_folder:
+                if not folder:
                     st.warning("Please select an output folder first.")
 
                 elif "pac_parameters" not in st.session_state:
                     st.warning("Please submit the PAC parameters first.")
 
                 else:
-                    st.session_state.pac_parameters["output_folder"] = output_folder
+                    st.session_state.pac_parameters["output_folder"] = folder
 
                     with st.spinner("Running K-map..."):
                         run_chi_macro(
-                        k_map_commands(st.session_state.pac_parameters)
+                        pac_commands(st.session_state.pac_parameters)
                              )
-
-                        k_values = k_map(output_folder,rg=10,a=5,box_length=3)
-
-                        fig = plot_k_map(k_values,box_length=5)
-
-                        st.pyplot(fig)
 
         col1, col2 = st.columns(2)
 
@@ -746,6 +729,235 @@ if mode == "SECM Scan":
                 )
             )
 
+if mode == "K-Map":
 
+    st.title("K-Map")
+    st.caption("Configure the K-map")
+
+    # ─────────────────────────────────────────────
+    # ROW 1
+    # ─────────────────────────────────────────────
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        with st.container(border=True):
+            st.subheader("Probe Electrode")
+
+            probe_pot = st.number_input(
+                "Probe potential (V)",
+                min_value=-10.0,
+                max_value=10.0,
+                value=0.0,
+                step=0.1,
+                key="pac_probe_pot"
+            )
+
+            sensitivity = st.number_input(
+                "Probe sensitivity (A/V)",
+                min_value=1e-12,
+                max_value=0.1,
+                value=1e-9,
+                format="%.2e",
+                key="pac_sensitivity"
+            )
+
+    with col2:
+        with st.container(border=True):
+            st.subheader("Probe E Pulse Before Sampling")
+
+            pulse_pot = st.number_input(
+                "Pulse potential (V)",
+                min_value=-10.0,
+                max_value=10.0,
+                value=0.0,
+                step=0.1,
+                key="pac_pulse_pot"
+            )
+
+            pulse_duration = st.number_input(
+                "Pulse duration (s)",
+                min_value=1e-6,
+                max_value=1e3,
+                value=0.001,
+                step=0.001,
+                format="%.4f",
+                key="pac_pulse_duration"
+            )
+
+            time_delay = st.number_input(
+                "Time delay (s)",
+                min_value=0.0,
+                max_value=100.0,
+                value=0.1,
+                step=0.01,
+                key="pac_time_delay"
+            )
+
+            epon = st.checkbox(
+                "Enable pulse potential",
+                key="pac_epon"
+            )
+
+    # ─────────────────────────────────────────────
+    # ROW 2
+    # ─────────────────────────────────────────────
+
+    col3, col4 = st.columns(2)
+
+    with col3:
+        with st.container(border=True):
+            st.subheader("Substrate Electrode")
+
+            substrate_pot = st.number_input(
+                "Substrate potential (V)",
+                min_value=-10.0,
+                max_value=10.0,
+                value=0.0,
+                step=0.1,
+                key="pac_substrate_pot"
+            )
+
+            sensitivity2 = st.number_input(
+                "Substrate sensitivity (A/V)",
+                min_value=1e-12,
+                max_value=0.1,
+                value=1e-9,
+                format="%.2e",
+                key="pac_sensitivity2"
+            )
+
+            e2on = st.checkbox(
+                "Enable substrate potential",
+                key="pac_e2on"
+            )
+
+            i2on = st.checkbox(
+                "Substrate current measurement",
+                key="pac_i2on"
+            )
+
+    with col4:
+        with st.container(border=True):
+            st.subheader("Stop Parameters")
+
+            current_ratio = st.number_input(
+                "Current ratio (%)",
+                min_value=1.0,
+                max_value=400.0,
+                value=50.0,
+                step=0.01,
+                key="pac_current_ratio"
+            )
+
+            current_abs = st.number_input(
+                "Current absolute value (A)",
+                min_value=0.0,
+                max_value=0.01,
+                value=1e-9,
+                format="%.2e",
+                key="pac_current_abs"
+            )
+
+            max_incr = st.number_input(
+                "Maximum increment during approach (µm)",
+                min_value=1e-6,
+                max_value=10.0,
+                value=0.01,
+                step=0.001,
+                format="%.4f",
+                key="pac_max_incr"
+            )
+
+            withdraw = st.number_input(
+                "Withdraw distance (µm)",
+                min_value=0.0,
+                max_value=10000.0,
+                value=5.0,
+                step=1.0,
+                key="pac_withdraw"
+            )
+
+            incrtime = st.number_input(
+                "Increment time (s)",
+                min_value=0.0,
+                max_value=100.0,
+                value=0.01,
+                step=0.01,
+                format="%.2e",
+                key="pac_incrtime"
+            )
+
+            probe_stop = st.selectbox(
+                "Probe stop mode",
+                ["Current ratio", "Absolute current"],
+                key="pac_probe_stop"
+            )
+    initial_z=st.number_input("Initial Z-coordinate (check chi920d.exe software)", value=17000.0, 
+                             min_value=100.0, max_value=25000.0, 
+                             placeholder="Open the chi920d.exe program to set initial z-coordinate")
+    returntostart = st.checkbox("Return to starting position after run")
+
+    # ─────────────────────────────────────────────
+    # SUBMIT PARAMETERS
+    # ─────────────────────────────────────────────
+
+    st.divider()
+
+    if st.button(
+        "Submit Parameters",
+        type="secondary",
+        use_container_width=True
+    ):
+        st.session_state.kmap_parameters = {
+            "probe_pot": probe_pot,
+            "sensitivity": sensitivity,
+            "pulse_duration": pulse_duration,
+            "time_delay": time_delay,
+            "sensitivity2": sensitivity2,
+            "substrate_pot": substrate_pot,
+            "pulse_pot": pulse_pot,
+            "current_ratio": current_ratio,
+            "current_abs": current_abs,
+            "max_incr": max_incr,
+            "withdraw": withdraw,
+            "incrtime": incrtime,
+            "probe_stop": probe_stop,
+            "e2on": e2on,
+            "epon": epon,
+            "i2on": i2on,
+            "initialz":initial_z,
+            "originon":returntostart
+        }
+
+        st.success("Parameters submitted successfully!")
+
+    
+    # run
+    if "kmap_parameters" in st.session_state:
+
+            st.subheader("K-Map")
+
+            output_folder = folder_picker("Select or create an empty folder")
+
+            if st.button(
+                "▶ Run K-Map (the current position will be the bottom left corner of scan)",
+                use_container_width=True
+                ):
+
+                if not output_folder:
+                    st.warning("Please select an output folder first.")
+
+                elif "kmap_parameters" not in st.session_state:
+                    st.warning("Please submit the K-Map parameters first.")
+
+                else:
+                    st.session_state.kmap_parameters["output_folder"] = output_folder
+
+                    with st.spinner("Running K-map..."):
+                        run_chi_macro(
+                        k_map_commands(st.session_state.kmap_parameters)
+                             )
+                        
 
 

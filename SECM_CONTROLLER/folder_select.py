@@ -1,5 +1,8 @@
+import subprocess
 import tkinter as tk
 from tkinter import filedialog
+
+
 import streamlit as st
 
 
@@ -8,7 +11,7 @@ def folder_picker(label="Output folder"):
     if "selected_folder" not in st.session_state:
         st.session_state.selected_folder = ""
 
-    col1, col2 = st.columns([5, 1])
+    col1, col2 = st.columns([2, 1])
 
     with col1:
         st.text_input(
@@ -19,7 +22,6 @@ def folder_picker(label="Output folder"):
 
     with col2:
         if st.button("Browse", key=f"browse_{label}"):
-
             root = tk.Tk()
             root.withdraw()
             root.attributes("-topmost", True)

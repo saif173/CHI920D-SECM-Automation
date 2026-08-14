@@ -1,5 +1,3 @@
-import pandas as pd
-import io
 
 
 import pandas as pd
@@ -13,6 +11,34 @@ def parse_file(filename):
 
     for line in lines:
         line = line.replace(",", " ")
+
+        if not line.strip():
+            continue
+
+        try:
+            float(line.split()[0])
+            data_lines.append(line)
+        except ValueError:
+            pass
+
+    data = pd.read_csv(
+        io.StringIO("\n".join(data_lines)),
+        sep=r"\s+",
+        header=None
+    )
+
+    L_data = data.iloc[:, 0].to_numpy()
+    I_data = data.iloc[:, 1].to_numpy()
+
+    return L_data, I_data
+
+def parse_file_st(uploaded_file):
+    lines = uploaded_file.getvalue().decode("utf-8").splitlines()
+
+    data_lines = []
+
+    for line in lines:
+        line = line.replace(",", " ")  # replace commas with spaces
 
         if not line.strip():
             continue

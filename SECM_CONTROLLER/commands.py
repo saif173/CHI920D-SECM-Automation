@@ -1,10 +1,11 @@
 import os
 import subprocess
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 from pac_analysis.file_parser import parse_file
 from pac_analysis.pac_curve_fit import find_k_deluxe
-
+from pac_analysis.process_pac_data import flip_data
+from pathlib import Path
 
 
 
@@ -17,7 +18,7 @@ empty = ["run"]
 def k_map_commands(parameters):
     commands = []
 
-    commands.append("zgoto:17000")
+    commands.append(f"zgoto:{parameters['initialz']}")
 
     for y in range(3):
         for x in range(3):
@@ -28,66 +29,21 @@ def k_map_commands(parameters):
             # Save result
             commands += [
             f"folder:{parameters['output_folder']}",
-            f"tsave:pos_{x}_{y}"
+            f"tsave:pos_{x}_{y}", f"zgoto:{parameters['initialz']}"
             ]
 
             # Move to next point in row
             if x < 2:
-                commands.append("x:300")
+                commands.append("x:100")
 
         # Move to beginning of next row
         if y < 2:
-            commands.append("x:-600")
-            commands.append("y:300")
+            commands.append("x:-200")
+            commands.append("y:-100")
 
+    if parameters['originon'] == True:
+        commands= commands + ["y:200", "x:-200"]
     return commands
-
-
-
-def k_map(folder, rg, a, box_length):
-    k_values = {}
-
-    for i, file in enumerate(folder):
-
-        L_data, I_data = parse_file(file)
-
-        k = find_k_deluxe(L_data, I_data, rg, a, L_data[-1])
-
-        x = i % box_length
-        y = i // box_length
-
-        k_values[(x, y)] = k
-
-    return k_values
-
-def plot_k_map(k_values, box_length):
-
-    # Create array
-    k_array = np.full((box_length, box_length), np.nan)
-
-    # Put each k value into the correct position
-    for (x, y), k in k_values.items():
-        k_array[y, x] = k
-
-    # Plot
-    fig, ax = plt.subplots()
-
-    im = ax.imshow(
-        k_array,
-        origin="lower",
-        extent=[0, 199, 0, 199],
-        aspect="equal"
-    )
-
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_title("2D k Map")
-
-    fig.colorbar(im, ax=ax, label="k")
-
-    return fig
-
-    
 
 
 def cv_commands(parameters):

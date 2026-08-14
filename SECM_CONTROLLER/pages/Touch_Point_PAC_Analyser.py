@@ -1,18 +1,18 @@
 import io
 import streamlit as st
 import pandas as pd
-from file_parser import parse_file_st
-from process_pac_data import normalize_data, flip_data
-from pac_plotting import plot
-from pac_curve_fit import model, plot_model, find_k, rms_error, find_k_deluxe
-from pac_selection import select_touchpoint
-from pac_curve_fit import find_i_infi
+from pac_analysis.file_parser import parse_file_st
+from pac_analysis.process_pac_data import normalize_data, flip_data
+from pac_analysis.pac_plotting import plot
+from pac_analysis.pac_curve_fit import model, plot_model, find_k, rms_error, find_k_deluxe, find_k_deluxe_shift, find_i_infi_shift, find_k_shift, shifted_model
+from pac_analysis.pac_selection import select_touchpoint
+from pac_analysis.pac_curve_fit import find_i_infi
 
 col1,col2 = st.columns(2)
 
 
 # app title and description
-st.title("Probe Approach Curve Analyzer")
+st.title("Touch-Point Probe Approach Curve Analyzer")
 st.write("Upload your experiment text file")
 
 
@@ -51,9 +51,3 @@ if uploaded_file is not None:
         st.write("RMS error =", rmse,"%")
     else:
         st.write("Error: a and rg must be a number greater than 0")
-    
-
-
-
-
-
