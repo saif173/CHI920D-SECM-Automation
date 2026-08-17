@@ -8,7 +8,7 @@ from pac_analysis.pac_curve_fit import find_k_deluxe_shift, find_k_deluxe
 from pac_analysis.process_pac_data import flip_data
 from pathlib import Path
 
-def k_map(folder, rg, a, box_length, zero_point, shift):
+def k_map(folder, rg, a, zero_point):
 
     folder = Path(folder)
     files = sorted(folder.glob("*.txt"))
@@ -51,23 +51,19 @@ def k_map(folder, rg, a, box_length, zero_point, shift):
 
     return k_values
 
+def plot_k_map(k_values, xmax, ymax):
 
-def plot_k_map(k_values, box_length):
+    k_array = np.full((ymax + 1, xmax + 1), np.nan)
 
-    # Create array
-    k_array = np.full((box_length, box_length), np.nan)
-
-    # Put each k value into the correct position
     for (x, y), k in k_values.items():
         k_array[y, x] = k
 
-    # Plot
     fig, ax = plt.subplots()
 
     im = ax.imshow(
         k_array,
         origin="lower",
-        extent=[0, box_length-1, 0, box_length-1],
+        extent=[0, xmax, 0, ymax],
         aspect="equal"
     )
 

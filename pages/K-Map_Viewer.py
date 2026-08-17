@@ -1,6 +1,7 @@
 import subprocess
 import tkinter as tk
 import streamlit as st
+import os
 
 from folder_select import folder_picker
 
@@ -12,9 +13,18 @@ st.subheader("K-Map")
 
 output_folder = folder_picker("Select a folder containing K-Map data")
 
+
+files = os.listdir(output_folder)
+
+last_file = files[-1]
+
+x, y = last_file.removesuffix(".txt").split("_")[-2:]
+
+x = int(x)
+y = int(y)
+
 rg = st.number_input("Enter value of RG")
 a=st.number_input("Enter value of a")
-box_length=3
 shift = 0.5
 
 if (rg>0) & (a>0):
@@ -26,6 +36,6 @@ if (rg>0) & (a>0):
         else:
 
             with st.spinner("Running K-map..."):
-                k_values = k_map(output_folder, rg, a, box_length, 0, shift)
-                fig = plot_k_map(k_values, box_length)
+                k_values = k_map(output_folder, rg, a, 0)
+                fig = plot_k_map(k_values, x, y)
                 st.pyplot(fig)

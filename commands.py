@@ -25,8 +25,8 @@ def k_map_commands(parameters):
 
     commands.append(f"zgoto:{parameters['initialz']}")
 
-    for y in range(3):
-        for x in range(3):
+    for y in range(int(parameters['ydist']//parameters['yincr'])+1):
+        for x in range(int(parameters['xdist']//parameters['xincr'])+1):
 
             # Run PAC
             commands += pac_commands(parameters)
@@ -38,16 +38,16 @@ def k_map_commands(parameters):
             ]
 
             # Move to next point in row
-            if x < 2:
-                commands.append("x:100")
+            if x < ((parameters['xdist']//parameters['xincr'])):
+                commands.append(f"x:{parameters['xincr']}")
 
         # Move to beginning of next row
-        if y < 2:
-            commands.append("x:-200")
-            commands.append("y:-100")
+        if y < (parameters['ydist']//parameters['yincr']):
+            commands.append(f"x:{-1*parameters['xdist']}")
+            commands.append(f"y:{-1*parameters['yincr']}")
 
     if parameters['originon'] == True:
-        commands= commands + ["y:200", "x:-200"]
+        commands= commands + [f"y:{parameters['ydist']}", f"x:{-1*parameters['xdist']}"]
     return commands
 
 
