@@ -294,9 +294,9 @@ if mode == "PAC Analysis":
                     )
                     )
 
-                    file1 = r"C:\chi\pos_level\pos1.txt"
-                    file2 = r"C:\chi\pos_level\pos2.txt"
-                    file3 = r"C:\chi\pos_level\pos3.txt"
+                    file1 = r"C:\secm\pos_level\pos1.txt"
+                    file2 = r"C:\secm\pos_level\pos2.txt"
+                    file3 = r"C:\secm\pos_level\pos3.txt"
 
                     offset1, offset2 = position_leveling(
                     file1, file2, file3
@@ -896,6 +896,15 @@ if mode == "K-Map":
     initial_z=st.number_input("Initial Z-coordinate (check chi920d.exe software)", value=17000.0, 
                              min_value=100.0, max_value=25000.0, 
                              placeholder="Open the chi920d.exe program to set initial z-coordinate")
+    x_dist = st.number_input("X-length (µm)")
+    y_dist = st.number_input("Y-length (µm)")
+    x_incr = st.number_input("Increment in x (µm)")
+    y_incr = st.number_input("Increment in y (µm)")
+    x_pixels = int(x_dist // x_incr) + 1
+    y_pixels = int(y_dist // y_incr) + 1
+    total = int(x_pixels * y_pixels) 
+    st.write(x_pixels, "x", y_pixels)
+    st.write(total, "pixels in total")
     returntostart = st.checkbox("Return to starting position after run")
 
     # ─────────────────────────────────────────────
@@ -903,13 +912,13 @@ if mode == "K-Map":
     # ─────────────────────────────────────────────
 
     st.divider()
-
-    if st.button(
+    if (x_incr >0) & (y_incr>0):
+        if st.button(
         "Submit Parameters",
         type="secondary",
         use_container_width=True
-    ):
-        st.session_state.kmap_parameters = {
+        ):
+            st.session_state.kmap_parameters = {
             "probe_pot": probe_pot,
             "sensitivity": sensitivity,
             "pulse_duration": pulse_duration,
@@ -930,7 +939,7 @@ if mode == "K-Map":
             "originon":returntostart
         }
 
-        st.success("Parameters submitted successfully!")
+            st.success("Parameters submitted successfully!")
 
     
     # run
