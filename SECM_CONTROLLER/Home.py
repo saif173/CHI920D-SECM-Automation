@@ -9,7 +9,7 @@ from folder_select import folder_picker
 from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands
 
 
-
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 st.set_page_config(
     # Title and icon for the browser's tab bar:
