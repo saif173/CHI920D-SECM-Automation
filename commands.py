@@ -3,16 +3,6 @@ import sys
 from pathlib import Path
 
 
-# 1. Force the exact Streamlit Cloud system path into Python
-cloud_root = "/mount/src/internship-secm"
-if cloud_root not in sys.path:
-    sys.path.append(cloud_root)
-
-# 2. Force a relative backup path just in case
-local_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if local_root not in sys.path:
-    sys.path.append(local_root)
-
 import numpy as np
 import matplotlib.pyplot as plt
 from pac_analysis.file_parser import parse_file
