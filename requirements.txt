@@ -2,3 +2,7 @@ streamlit
 pandas
 matplotlib
 numpy
+tkinter
+subprocess
+sys
+os
