@@ -3,13 +3,22 @@ import tkinter as tk
 import streamlit as st
 import sys
 from pathlib import Path
+import os
 
 from folder_select import folder_picker
 
 from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands
 
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+# Explicit cloud path fix
+cloud_path = "/mount/src/internship-secm"
+if cloud_path not in sys.path:
+    sys.path.append(cloud_path)
+    
+# Local path fallback (just in case you still run it on your computer)
+local_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if local_path not in sys.path:
+    sys.path.append(local_path)
 
 st.set_page_config(
     # Title and icon for the browser's tab bar:
