@@ -11,6 +11,7 @@ from pac_analysis.pac_curve_fit import find_k_deluxe
 from pac_analysis.process_pac_data import flip_data
 
 
+PROJECT_DIR = Path(__file__).resolve().parent
 
 
 
@@ -108,16 +109,52 @@ def pac_commands(parameters):
 
     return commands
 
+def pure_pac_commands(parameters):
+    commands = [f"tech:pac",
+        f"ei:{parameters['probe_pot']}",
+        f"sens:{parameters['sensitivity']}",
+        f"tp:{parameters['pulse_duration']}",
+        f"td:{parameters['time_delay']}",
+        f"sens2:{parameters['sensitivity2']}",
+        f"iratio:{parameters['current_ratio']}",
+        f"iabs:{parameters['current_abs']}",
+        f"maxincr:{parameters['max_incr']}",
+        f"withdraw:{parameters['withdraw']}",
+        f"incrtime:{parameters['incrtime']}",
+        ]
+    if parameters['epon'] == True:
+        commands.append("epon")
+        commands.append(f"ep:{parameters['pulse_pot']}")
+    elif parameters['epon'] == False:
+        commands.append("epoff")
+    if parameters['e2on'] == True:
+        commands.append("e2on")
+        commands.append(f"e2:{parameters['substrate_pot']}")
+    elif parameters['e2on'] == False:
+        commands.append("e2off")
+    if parameters['i2on'] == True:
+        commands.append("i2on")
+    elif parameters['i2on'] == False:
+        commands.append("i2off")
+    if parameters['probe_stop'] == "Current ratio":
+        commands.append("iratioon")
+    elif parameters['probe_stop'] == "Absolute current":
+        commands.append("iabson")  
+    commands = commands + [f"run", f"folder:{parameters['output_folder']}",
+                            f"tsave:{parameters['filename']}"]
+
+    return commands
+
 def position_leveling_commands(parameters):
 
     return (
         ["zgoto:17000"]
         + pac_commands(parameters)
-        + [r"folder:C:\chi\pos_level", "tsave:pos1", "zgoto:17000", "x:1500"]
+        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos1", "zgoto:17000", "x:1500"]
         + pac_commands(parameters)
-        + [r"folder:C:\chi\pos_level", "tsave:pos2", "zgoto:17000", "x:-750", "y:1500"]
+        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos2", "zgoto:17000", "x:-750", "y:1500"]
         + pac_commands(parameters)
-        + [r"folder:C:\chi\pos_level", "tsave:pos3", "zgoto:17000", "x:-750", "y:-1500"]
+        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos3", "zgoto:17000", "x:-750", "y:-1500"]
     )
 
 
@@ -207,17 +244,18 @@ def secm_commands(parameters):
     elif parameters['originon']==False:
         commands.append("originoff")
 
-    commands = commands + [f"run", f"fileoverride", f"folder:C:\chi\secm_data", f"tsave:{parameters['filename']}"]
+    commands = commands + [f"run", f"fileoverride", f"folder:{parameters['output_folder']}", 
+                            f"tsave:{parameters['filename']}"]
 
     return commands
 
 def run_chi_macro(macro_commands):
 
     chi_exe = r"C:\chi\chi920d.exe"
-    macro_file = r"C:\chi\test.mcr"
+    macro_file = PROJECT_DIR / "macro_files" / "test.mcr"
     
-    with open(r"C:\chi\test.mcr", "wb") as f:
-        f.write(b"\xff\xff\x00\x00")
+    with open(PROJECT_DIR / "macro_files" / "test.mcr", "wb") as f:
+        f.write(b"\xff\xff\x01\x00")
         f.write("\r\n".join(macro_commands).encode("ascii"))
 
     # run the subprocess using the variables

@@ -5,11 +5,17 @@ import sys
 from pathlib import Path
 import os
 
+
+
 from folder_select import folder_picker
 
-from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands
+from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands, pure_pac_commands
 
+if "offset1" not in st.session_state:
+    st.session_state.offset1 = None
 
+if "offset2" not in st.session_state:
+    st.session_state.offset2 = None
 
 st.set_page_config(
     # Title and icon for the browser's tab bar:
@@ -18,7 +24,33 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("SECM Controller")
+st.set_page_config(
+    page_title="SECM Controller",
+    layout="wide"
+)
+
+st.markdown("""
+<style>
+    header {
+        visibility: hidden;
+    }
+
+    #MainMenu {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+
+    .block-container {
+        padding-top: 1rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
+
 
 mode = st.selectbox("Select Mode", ["Cyclic Voltammetry", "K-Map", "PAC Analysis", "SECM Scan"])
 
@@ -290,6 +322,7 @@ if mode == "PAC Analysis":
                             ):
                 with st.spinner("Running position leveling..."):
 
+
                     run_chi_macro(
                     position_leveling_commands(
                     st.session_state.pac_parameters
@@ -300,11 +333,11 @@ if mode == "PAC Analysis":
                     file2 = r"C:\secm\pos_level\pos2.txt"
                     file3 = r"C:\secm\pos_level\pos3.txt"
 
-                    offset1, offset2 = position_leveling(
+                    st.session_state.offset1, st.session_state.offset2 = position_leveling(
                     file1, file2, file3
                         )
 
-
+    
         with run_col1:
 
             st.subheader("PAC Analysis")
@@ -325,27 +358,28 @@ if mode == "PAC Analysis":
                 else:
                     st.session_state.pac_parameters["output_folder"] = folder
 
-                    with st.spinner("Running K-map..."):
+                    with st.spinner("Running PAC Analysis..."):
                         run_chi_macro(
-                        pac_commands(st.session_state.pac_parameters)
+                        pure_pac_commands(st.session_state.pac_parameters)
                              )
 
         col1, col2 = st.columns(2)
 
+    if (st.session_state.offset1 is not None) & (st.session_state.offset2 is not None):
         with col1:
             st.metric(
             "Offset 1",
-            f"{offset1:.2f} µm"
+            f"{st.session_state.offset1:.2f} µm"
             )
 
-            if offset1 < 0:
+            if st.session_state.offset1 < 0:
                 st.info(
-                f"Position 2 is **{abs(offset1):.2f} µm higher** "
+                f"Position 2 is **{abs(st.session_state.offset1):.2f} µm higher** "
                 "than Position 1."
                 )
-            elif offset1 > 0:
+            elif st.session_state.offset1 > 0:
                 st.info(
-                f"Position 2 is **{offset1:.2f} µm lower** "
+                f"Position 2 is **{st.session_state.offset1:.2f} µm lower** "
                 "than Position 1."
                 )
             else:
@@ -354,17 +388,17 @@ if mode == "PAC Analysis":
         with col2:
             st.metric(
             "Offset 2",
-            f"{offset2:.2f} µm"
+            f"{st.session_state.offset2:.2f} µm"
             )
 
-            if offset2 < 0:
+            if st.session_state.offset2 < 0:
                 st.info(
-                f"Position 3 is **{abs(offset2):.2f} µm higher** "
+                f"Position 3 is **{abs(st.session_state.offset2):.2f} µm higher** "
                 "than Position 1."
                 )
-            elif offset2 > 0:
+            elif st.session_state.offset2 > 0:
                 st.info(
-                f"Position 3 is **{offset2:.2f} µm lower** "
+                f"Position 3 is **{st.session_state.offset2:.2f} µm lower** "
                 "than Position 1."
                 )
             else:
@@ -718,18 +752,23 @@ if mode == "SECM Scan":
 
     if "secm_parameters" in st.session_state:
 
-        st.divider()
-
-        if st.button(
-            "▶ Run SECM",
-            type="primary",
-            use_container_width=True
-        ):
-            run_chi_macro(
-                secm_commands(
-                    st.session_state.secm_parameters
-                )
-            )
+        secmfolder = folder_picker("Select an output folder")
+            
+        if st.button("▶ Run SECM Scan",use_container_width=True):
+            
+            if not secmfolder:
+                st.warning("Please select an output folder first.")
+            
+            elif "secm_parameters" not in st.session_state:
+                st.warning("Please submit the SECM parameters first.")
+            
+            else:
+                st.session_state.secm_parameters["output_folder"] = secmfolder
+            
+                with st.spinner("Running SECM Scan..."):
+                    run_chi_macro(secm_commands(st.session_state.secm_parameters)
+                                         )
+            
 
 if mode == "K-Map":
 
@@ -875,7 +914,7 @@ if mode == "K-Map":
                 "Withdraw distance (µm)",
                 min_value=0.0,
                 max_value=10000.0,
-                value=5.0,
+                value=0.0,
                 step=1.0,
                 key="pac_withdraw"
             )
@@ -953,7 +992,7 @@ if mode == "K-Map":
             output_folder = folder_picker("Select or create an empty folder")
 
             if st.button(
-                "▶ Run K-Map (the current position will be the bottom left corner of scan)",
+                "▶ Run K-Map (the initial position will be the bottom left corner of scan)",
                 use_container_width=True
                 ):
 
