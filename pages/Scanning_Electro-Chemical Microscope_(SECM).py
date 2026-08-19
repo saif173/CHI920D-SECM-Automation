@@ -16,9 +16,7 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    header {
-        visibility: hidden;
-    }
+    
 
     #MainMenu {
         visibility: hidden;

@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 import subprocess
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 from pac_analysis.file_parser import parse_file
@@ -12,13 +11,6 @@ from pac_analysis.process_pac_data import flip_data
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-
-
-
-test = ["tech:cv","eh:0.3","ei:0.1","run"]
-print(test)
-test2 = ["x:3000", "xreset"]
-empty = ["run"]
 
 
 def k_map_commands(parameters):
@@ -274,18 +266,3 @@ def run_chi_macro(macro_commands):
 
 
 
-    
-
-#subprocess.run([r"C:\chi\chi920d.exe", "/runmacro:C:\\chi\\test.mcr"], check=True)
-#subprocess.run([r"C:\chi\chi920d.exe", "/runmacro:C:\\chi\\cv_ideal.mcr"], check=True)
-
-"""run_chi_macro(test)"""
-
-"""with open(r"C:\chi\ideal.mcr", "rb") as f:
-    print(f.read(20))"""
-
-"""with open(r"C:\chi\test.mcr", "rb") as f:
-    print(f.read(40))
-
-with open(r"C:\chi\macro\pop.mcr", "rb") as f:
-    print(f.read(40))"""

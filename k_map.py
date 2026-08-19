@@ -56,7 +56,7 @@ def plot_k_map(k_values, xmax, ymax):
     k_array = np.full((ymax + 1, xmax + 1), np.nan)
 
     for (x, y), k in k_values.items():
-        k_array[y, x] = k
+        k_array[y-1, x-1] = k
 
     fig, ax = plt.subplots()
 

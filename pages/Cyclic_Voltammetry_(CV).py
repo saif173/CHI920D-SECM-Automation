@@ -16,9 +16,6 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    header {
-        visibility: hidden;
-    }
 
     #MainMenu {
         visibility: hidden;
@@ -35,7 +32,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.title("Cyclic Voltammetry Parameters")
+st.title("Cyclic Voltammetry")
 col1, col2 = st.columns(2)
 
 with col1:

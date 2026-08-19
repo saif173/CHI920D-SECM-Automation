@@ -23,9 +23,7 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    header {
-        visibility: hidden;
-    }
+
 
     #MainMenu {
         visibility: hidden;
@@ -252,38 +250,6 @@ if mode == "Run PAC Scan":
     # run
     if "pac_parameters" in st.session_state:
 
-        st.divider()
-
-        st.subheader("Experiment Controls")
-
-        run_col1, run_col2 = st.columns(2)
-
-
-        with run_col2:
-            if st.button("⚙ Run Position Leveling", use_container_width=True
-                            ):
-                with st.spinner("Running position leveling..."):
-
-
-                    run_chi_macro(
-                    position_leveling_commands(
-                    st.session_state.pac_parameters
-                    )
-                    )
-
-                    file1 = r"C:\secm\pos_level\pos1.txt"
-                    file2 = r"C:\secm\pos_level\pos2.txt"
-                    file3 = r"C:\secm\pos_level\pos3.txt"
-
-                    st.session_state.offset1, st.session_state.offset2 = position_leveling(
-                    file1, file2, file3
-                        )
-
-    
-        with run_col1:
-
-            st.subheader("PAC Analysis")
-
             folder = folder_picker("Select an output folder")
 
             if st.button(
@@ -305,46 +271,6 @@ if mode == "Run PAC Scan":
                         pure_pac_commands(st.session_state.pac_parameters)
                              )
 
-        col1, col2 = st.columns(2)
-
-    if (st.session_state.offset1 is not None) & (st.session_state.offset2 is not None):
-        with col1:
-            st.metric(
-            "Offset 1",
-            f"{st.session_state.offset1:.2f} µm"
-            )
-
-            if st.session_state.offset1 < 0:
-                st.info(
-                f"Position 2 is **{abs(st.session_state.offset1):.2f} µm higher** "
-                "than Position 1."
-                )
-            elif st.session_state.offset1 > 0:
-                st.info(
-                f"Position 2 is **{st.session_state.offset1:.2f} µm lower** "
-                "than Position 1."
-                )
-            else:
-                st.info("Position 2 is level with Position 1.")
-
-        with col2:
-            st.metric(
-            "Offset 2",
-            f"{st.session_state.offset2:.2f} µm"
-            )
-
-            if st.session_state.offset2 < 0:
-                st.info(
-                f"Position 3 is **{abs(st.session_state.offset2):.2f} µm higher** "
-                "than Position 1."
-                )
-            elif st.session_state.offset2 > 0:
-                st.info(
-                f"Position 3 is **{st.session_state.offset2:.2f} µm lower** "
-                "than Position 1."
-                )
-            else:
-                st.info("Position 3 is level with Position 1.")
 
 if mode == "Touch-point PAC Analyser":
 
