@@ -305,12 +305,22 @@ if mode == "Touch-point PAC Analyser":
             k=find_k_deluxe(L_data, I_data, rg, a, touch_point)
             pred = model(rel_L,k,rg) 
             rmse = rms_error(rel_I,pred)
+        
 
             #define and show plots
             fig2 = plot(rel_L, rel_I, "Normalized Distance", 
                 "Normalized Current", "Normalized PAC curve")
             fig3 = plot_model(rel_L, rel_I, k,rg)
             st.plotly_chart(fig2)
+
+            data = "rel_L\trel_I\n" + "\n".join(
+                        f"{L}\t{I}" for L, I in zip(rel_L, rel_I))
+            
+            st.download_button(label="Download normalized data",
+                        data=data,
+                        file_name="normalized_data.txt",
+                        mime="text/plain")
+            
             st.plotly_chart(fig3)
             st.write("k =", k)
             st.write("Error is minimised when bulk current is estimated as:", i_infi, "Amperes")
