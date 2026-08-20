@@ -39,27 +39,32 @@ def k_map(folder, rg, a, zero_point):
             print("k =", k)
 
             parts = file.stem.split("_")
-            x = int(parts[-2])
-            y = int(parts[-1])
+            x = int(parts[-4])
+            y = int(parts[-3])
+            xincr = int(parts[-2])
+            yincr = int(parts[-1])
 
-            k_values[(x, y)] = k
+            k_values[(x*xincr, y*yincr)] = k
 
         except Exception as e:
             print(f"FAILED: {file.name}")
             print(e)
             traceback.print_exc()
 
-    return k_values
+    return k_values, xincr, yincr
 
-def plot_k_map(k_values):
+def plot_k_map(k_values, xincr, yincr):
 
     xmax = max(x for x, y in k_values)
     ymax = max(y for x, y in k_values)
+    xmax_i = int(xmax/xincr)
+    ymax_i = int(xmax/yincr)
 
-    k_array = np.full((ymax + 1, xmax + 1), np.nan)
+    k_array = np.full((ymax_i + 1, xmax_i + 1), np.nan)
 
     for (x, y), k in k_values.items():
-        k_array[y, x] = k
+        k_array[int(y/yincr), int(x/xincr)] = k
+
 
     fig, ax = plt.subplots()
 
@@ -70,8 +75,8 @@ def plot_k_map(k_values):
         aspect="equal"
     )
 
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
+    ax.set_xlabel("X (µm)")
+    ax.set_ylabel("Y (µm)")
     ax.set_title("2D k Map")
 
     fig.colorbar(im, ax=ax, label="k")

@@ -313,7 +313,7 @@ if mode == "Touch-point PAC Analyser":
             fig3 = plot_model(rel_L, rel_I, k,rg)
             st.plotly_chart(fig2)
 
-            data = "rel_L\trel_I\n" + "\n".join(
+            data = "Normalised Distance\tNormalised Current\n" + "\n".join(
                         f"{L}\t{I}" for L, I in zip(rel_L, rel_I))
             
             st.download_button(label="Download normalized data",

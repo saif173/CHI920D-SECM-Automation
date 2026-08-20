@@ -27,7 +27,8 @@ def k_map_commands(parameters):
             # Save result
             commands += [
             f"folder:{parameters['output_folder']}",
-            f"tsave:pos_{x}_{y}", f"zgoto:{parameters['initialz']}"
+            f"tsave:pos_{x}_{y}_{parameters['xincr']}_{parameters['yincr']}", 
+            f"zgoto:{parameters['initialz']}"
             ]
 
             # Move to next point in row

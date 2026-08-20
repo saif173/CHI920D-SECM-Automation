@@ -2,6 +2,7 @@ import subprocess
 import tkinter as tk
 import streamlit as st
 import os
+import pandas as pd
 
 from folder_select import folder_picker
 
@@ -290,7 +291,7 @@ if mode == "Plot K-Map":
     if output_folder is not "":
 
         rg = st.number_input("Enter value of RG")
-        a=st.number_input("Enter value of a")
+        a=st.number_input("Enter value of a (µm)")
 
         if (rg>0) & (a>0):
             if st.button( "▶ Display K-Map", use_container_width=True):
@@ -301,7 +302,29 @@ if mode == "Plot K-Map":
                 else:
 
                     with st.spinner("Running K-map..."):
-                        k_values = k_map(output_folder, rg, a, 0)
-                        fig = plot_k_map(k_values)
+                        k_values, xincr, yincr = k_map(output_folder, rg, a, 0)
+
+                        # Store results in session state
+                        st.session_state.k_values = k_values
+                        st.session_state.xincr = xincr
+                        st.session_state.yincr = yincr
+
+                # Display K-map if it exists
+            if "k_values" in st.session_state:
+
+                        fig = plot_k_map(st.session_state.k_values,st.session_state.xincr,
+                            st.session_state.yincr)
+
                         st.pyplot(fig)
 
+                        # Create download data
+                        df = pd.DataFrame([(x, y, k) for (x, y), k 
+                                           in st.session_state.k_values.items()],
+                                    columns=["X (um)", "Y (um)", "k (/m)"])
+
+                        txt = df.to_csv(index=False)
+
+                        st.download_button(label="Download as .txt", data=txt, 
+                                           file_name="k_values.txt",
+                                            mime="text/plain",
+                                            use_container_width=True)
