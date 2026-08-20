@@ -192,7 +192,7 @@ if mode == "Run PAC Scan":
                 "Withdraw distance (µm)",
                 min_value=0.0,
                 max_value=10000.0,
-                value=5.0,
+                value=0.0,
                 step=1.0,
                 key="pac_withdraw"
             )

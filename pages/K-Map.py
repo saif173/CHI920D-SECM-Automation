@@ -177,14 +177,6 @@ if mode == "Run Mapping":
                     key="pac_max_incr"
                 )
     
-                withdraw = st.number_input(
-                    "Withdraw distance (µm)",
-                    min_value=0.0,
-                    max_value=10000.0,
-                    value=5.0,
-                    step=1.0,
-                    key="pac_withdraw"
-                )
     
                 incrtime = st.number_input(
                     "Increment time (s)",
@@ -240,7 +232,6 @@ if mode == "Run Mapping":
             "current_ratio": current_ratio,
             "current_abs": current_abs,
             "max_incr": max_incr,
-            "withdraw": withdraw,
             "incrtime": incrtime,
             "probe_stop": probe_stop,
             "e2on": e2on,

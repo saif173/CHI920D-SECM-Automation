@@ -77,7 +77,7 @@ def pac_commands(parameters):
         f"iratio:{parameters['current_ratio']}",
         f"iabs:{parameters['current_abs']}",
         f"maxincr:{parameters['max_incr']}",
-        f"withdraw:{parameters['withdraw']}",
+        f"withdraw:0.0",
         f"incrtime:{parameters['incrtime']}",
         ]
     if parameters['epon'] == True:

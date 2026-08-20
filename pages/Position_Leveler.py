@@ -182,14 +182,6 @@ with col4:
                 key="pac_max_incr"
             )
 
-            withdraw = st.number_input(
-                "Withdraw distance (µm)",
-                min_value=0.0,
-                max_value=10000.0,
-                value=5.0,
-                step=1.0,
-                key="pac_withdraw"
-            )
 
             incrtime = st.number_input(
                 "Increment time (s)",
@@ -209,8 +201,8 @@ with col4:
 
 initialz = st.number_input("Initial Z coordinate (check chi920d.exe software)", 
                            value=17000, min_value=0, max_value=25000)
-xdist = st.number_input("Distance travelled to position 2 (x)", value=1000.0, min_value=0.0, max_value=4000.0)
-ydist = st.number_input("Distance travelled to position 3 (y)", value=1000.0, min_value=0.0, max_value=4000.0)
+xdist = st.number_input("X-distance travelled to position 2 (µm)", value=1000.0, min_value=0.0, max_value=4000.0)
+ydist = st.number_input("Y-distance travelled to position 3 (µm)", value=1000.0, min_value=0.0, max_value=4000.0)
 
 fig = show_position_grid(xdist, ydist)
 st.pyplot(fig)
@@ -239,7 +231,6 @@ if st.button(
             "current_ratio": current_ratio,
             "current_abs": current_abs,
             "max_incr": max_incr,
-            "withdraw": withdraw,
             "incrtime": incrtime,
             "probe_stop": probe_stop,
             "e2on": e2on,
