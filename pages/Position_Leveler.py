@@ -236,7 +236,7 @@ if st.button(
             "probe_stop": probe_stop,
             "e2on": e2on,
             "epon": epon,
-            "i2on": i2on, "initialz"=initialz
+            "i2on": i2on, "initialz":initialz
         }
 
         st.success("Parameters submitted successfully!")
