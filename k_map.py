@@ -51,12 +51,15 @@ def k_map(folder, rg, a, zero_point):
 
     return k_values
 
-def plot_k_map(k_values, xmax, ymax):
+def plot_k_map(k_values):
+
+    xmax = max(x for x, y in k_values)
+    ymax = max(y for x, y in k_values)
 
     k_array = np.full((ymax + 1, xmax + 1), np.nan)
 
     for (x, y), k in k_values.items():
-        k_array[y-1, x-1] = k
+        k_array[y, x] = k
 
     fig, ax = plt.subplots()
 

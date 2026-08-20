@@ -288,13 +288,6 @@ if mode == "Plot K-Map":
     output_folder = folder_picker("Select a folder containing K-Map data")
 
     if output_folder is not "":
-        files = os.listdir(output_folder)
-        last_file = files[-1]
-
-        x, y = last_file.removesuffix(".txt").split("_")[-2:]
-
-        x = int(x)
-        y = int(y)
 
         rg = st.number_input("Enter value of RG")
         a=st.number_input("Enter value of a")
@@ -309,5 +302,6 @@ if mode == "Plot K-Map":
 
                     with st.spinner("Running K-map..."):
                         k_values = k_map(output_folder, rg, a, 0)
-                        fig = plot_k_map(k_values, x, y)
+                        fig = plot_k_map(k_values)
                         st.pyplot(fig)
+
