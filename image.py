@@ -36,8 +36,8 @@ def show_position_grid(xdist, ydist):
 
     ax.set_aspect("equal", adjustable="box")
 
-    ax.set_xlabel("X distance")
-    ax.set_ylabel("Y distance")
-    ax.set_title("SECM Positioning")
+    ax.set_xlabel("X distance (µm)")
+    ax.set_ylabel("Y distance (µm)")
+    ax.set_title("Scan locations")
 
     return fig
