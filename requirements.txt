@@ -1,0 +1,10 @@
+This software requires python to be installed on the machine, with the following libraries:
+
+numpy
+scipy
+matplotlib
+plotly
+streamlit
+pillow
+
+Open windows powershell and paste: python -m pip install streamlit numpy scipy matplotlib pillow plotly

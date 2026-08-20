@@ -44,17 +44,16 @@ st.markdown("""
 
 st.title("Position Leveler")
 
-if st.session_state.pagenum == 1:
 
-    st.caption("Configure the PAC Parameters")
+st.caption("Configure the PAC Parameters")
 
     # ─────────────────────────────────────────────
     # ROW 1
     # ─────────────────────────────────────────────
 
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-    with col1:
+with col1:
             with st.container(border=True):
                 st.subheader("Probe Electrode")
 
@@ -76,7 +75,7 @@ if st.session_state.pagenum == 1:
                 key="pac_sensitivity"
                 )
 
-    with col2:
+with col2:
         with st.container(border=True):
                     st.subheader("Substrate Electrode")
         
@@ -112,9 +111,9 @@ if st.session_state.pagenum == 1:
     # ROW 2
     # ─────────────────────────────────────────────
 
-    col3, col4 = st.columns(2)
+col3, col4 = st.columns(2)
 
-    with col3:
+with col3:
         with st.container(border=True):
                     st.subheader("Probe E Pulse Before Sampling")
         
@@ -150,7 +149,7 @@ if st.session_state.pagenum == 1:
                         "Enable pulse potential",
                         key="pac_epon"
                     )
-    with col4:
+with col4:
         with st.container(border=True):
             st.subheader("Stop Parameters")
 
@@ -208,13 +207,35 @@ if st.session_state.pagenum == 1:
             )
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # ─────────────────────────────────────────────
     # SUBMIT PARAMETERS
     # ─────────────────────────────────────────────
+st.divider()
 
-    st.divider()
-
-    if st.button(
+if st.button(
         "Submit Parameters",
         type="secondary",
         use_container_width=True
@@ -239,14 +260,10 @@ if st.session_state.pagenum == 1:
         }
 
         st.success("Parameters submitted successfully!")
-        if st.button("Next"):
-             st.session_state.pagenum = 2
-
+        
     
-if st.session_state.pagenum == 2:
 
-    st.image()
-    if "pl_parameters" in st.session_state:
+if "pl_parameters" in st.session_state:
 
             if st.button("⚙ Run Position Leveling", use_container_width=True
                             ):
