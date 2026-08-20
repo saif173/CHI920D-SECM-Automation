@@ -140,13 +140,13 @@ def pure_pac_commands(parameters):
 def position_leveling_commands(parameters):
 
     return (
-        ["zgoto:17000"]
+        [f"zgoto:{parameters['initialz']}"]
         + pac_commands(parameters)
-        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos1", "zgoto:17000", "x:1500"]
+        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos1", f"zgoto:{parameters['initialz']}", "x:1500"]
         + pac_commands(parameters)
-        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos2", "zgoto:17000", "x:-750", "y:1500"]
+        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos2", f"zgoto:{parameters['initialz']}", "x:-750", "y:1500"]
         + pac_commands(parameters)
-        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos3", "zgoto:17000", "x:-750", "y:-1500"]
+        + [f"folder:{PROJECT_DIR / 'pos_level'}", "tsave:pos3", f"zgoto:{parameters['initialz']}", "x:-750", "y:-1500"]
     )
 
 

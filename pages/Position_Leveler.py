@@ -206,32 +206,12 @@ with col4:
                 key="pac_probe_stop"
             )
 
+initialz = st.number_input("Initial Z coordinate (check chi920d.exe software)", 
+                           value=17000, min_value=0, max_value=25000)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # ─────────────────────────────────────────────
-    # SUBMIT PARAMETERS
+    # ───────────────────────────────────────────   # SUBMIT PARAMETERS
     # ─────────────────────────────────────────────
 st.divider()
 
@@ -256,7 +236,7 @@ if st.button(
             "probe_stop": probe_stop,
             "e2on": e2on,
             "epon": epon,
-            "i2on": i2on,
+            "i2on": i2on, "initialz"=initialz
         }
 
         st.success("Parameters submitted successfully!")
