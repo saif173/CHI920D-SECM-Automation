@@ -4,6 +4,7 @@ import streamlit as st
 import os
 from pathlib import Path
 from folder_select import folder_picker
+from image import show_position_grid
 
 from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands
 from k_map import k_map, plot_k_map
@@ -208,6 +209,13 @@ with col4:
 
 initialz = st.number_input("Initial Z coordinate (check chi920d.exe software)", 
                            value=17000, min_value=0, max_value=25000)
+xdist = st.number_input("Distance travelled to position 2 (x)", value=1000.0, min_value=0.0, max_value=4000.0)
+ydist = st.number_input("Distance travelled to position 3 (y)", value=1000.0, min_value=0.0, max_value=4000.0)
+
+fig = show_position_grid(xdist, ydist)
+st.pyplot(fig)
+
+
 
 
 
@@ -236,7 +244,7 @@ if st.button(
             "probe_stop": probe_stop,
             "e2on": e2on,
             "epon": epon,
-            "i2on": i2on, "initialz":initialz
+            "i2on": i2on, "initialz":initialz, "xdist": xdist, "ydist": ydist
         }
 
         st.success("Parameters submitted successfully!")
