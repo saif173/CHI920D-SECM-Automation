@@ -8,7 +8,7 @@ from folder_select import folder_picker
 from commands import cv_commands, pac_commands,position_leveling, position_leveling_commands, run_chi_macro, secm_commands, k_map_commands
 from k_map import k_map, plot_k_map
 
-PROJECT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = Path(__file__).resolve().parent.parent
 
 if "offset1" not in st.session_state:
     st.session_state.offset1 = None
