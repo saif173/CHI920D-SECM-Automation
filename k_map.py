@@ -36,7 +36,7 @@ def k_map(folder, rg, a, zero_point):
 
             print("k =", k)
 
-            parts = file.stem.split("_", "-")
+            parts = file.stem.split("_", "a")
             x = int(parts[-4])
             y = int(parts[-3])
             xincr = int(parts[-2])

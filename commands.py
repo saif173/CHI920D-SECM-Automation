@@ -24,7 +24,7 @@ def k_map_commands(parameters):
             # Save result
             commands += [
             f"folder:{parameters['output_folder']}",
-            f"tsave:pos_{x}_{y}_{parameters['xincr']}-{parameters['yincr']}", 
+            f"tsave:pos_{x}_{y}_{parameters['xincr']}a{parameters['yincr']}", 
             f"zgoto:{parameters['initialz']}"
             ]
 
