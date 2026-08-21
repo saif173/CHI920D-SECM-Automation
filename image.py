@@ -25,8 +25,7 @@ def show_position_grid(xdist, ydist):
 
     # Connect positions
     ax.plot([x1, x2], [y1, y2], "--")
-    ax.plot([x1, x3], [y1, y3], "--")
-    ax.plot([x2, x3], [y2, y3], "--")
+    ax.plot([(x2-x1)/2, x3], [y1, y3], "--")
 
     # Grid
     ax.grid(True)

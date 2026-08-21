@@ -199,13 +199,21 @@ with col4:
                 key="pac_probe_stop"
             )
 
-initialz = st.number_input("Initial Z coordinate (check chi920d.exe software)", 
-                           value=17000, min_value=0, max_value=25000)
-xdist = st.number_input("X-distance travelled to position 2 (µm)", value=1000.0, min_value=0.0, max_value=4000.0)
-ydist = st.number_input("Y-distance travelled to position 3 (µm)", value=1000.0, min_value=0.0, max_value=4000.0)
+col5,col6 = st.columns(2)
 
-fig = show_position_grid(xdist, ydist)
-st.pyplot(fig)
+with col5:
+    with st.container(border=True):
+        st.subheader("Leveling parameters")
+        initialz = st.number_input("Initial Z coordinate (check chi920d.exe software)", 
+                           value=17000, min_value=0, max_value=25000)
+        xdist = st.number_input("X-distance travelled to position 2 (µm)", value=1000.0, 
+                            min_value=0.0, max_value=4000.0)
+        ydist = st.number_input("Y-distance travelled to position 3 (µm)", value=1000.0, 
+                            min_value=0.0, max_value=4000.0)
+
+with col6:
+    fig = show_position_grid(xdist, ydist)
+    st.pyplot(fig)
 
 
 

@@ -193,22 +193,30 @@ if mode == "Run Mapping":
                     ["Current ratio", "Absolute current"],
                     key="pac_probe_stop"
                 )
-    
-    initial_z=st.number_input("Initial Z-coordinate (check chi920d.exe software)", value=17000.0, 
+
+    col5, col6 = st.columns(2)
+
+    with col5:
+            with st.container(border=True):
+                st.subheader("Scan parameters")
+                initial_z=st.number_input("Initial Z-coordinate (check chi920d.exe software)", value=17000.0, 
                              min_value=100.0, max_value=25000.0, 
                              placeholder="Open the chi920d.exe program to set initial z-coordinate")
-    x_dist = st.number_input("X-length (µm)", value =100.0, min_value=0.0)
-    y_dist = st.number_input("Y-length (µm)", value =100.0, min_value=0.0)
-    x_incr = st.number_input("Increment in x (µm)", value=10.0, min_value=0.0, max_value=1000.0)
-    y_incr = st.number_input("Increment in y (µm)" , value = 10.0, min_value=0.0, max_value=1000.0)
-    x_pixels = int(x_dist // x_incr) + 1
-    y_pixels = int(y_dist // y_incr) + 1
-    real_x_dist = x_incr * (x_pixels-1)
-    real_y_dist = y_incr * (y_pixels-1)
-    total = int(x_pixels * y_pixels) 
-    st.write("True scan distance X (µm):", real_x_dist, "True scan distance Y (µm):", real_y_dist)
-    st.write(x_pixels, " X pixels", y_pixels, "Y pixels", total, "pixels in total")
-    returntostart = st.checkbox("Return to starting position after run")
+                x_dist = st.number_input("X-length (µm)", value =100.0, min_value=0.0)
+                y_dist = st.number_input("Y-length (µm)", value =100.0, min_value=0.0)
+                x_incr = st.number_input("Increment in x (µm)", value=10.0, min_value=0.0, max_value=1000.0)
+                y_incr = st.number_input("Increment in y (µm)" , value = 10.0, min_value=0.0, max_value=1000.0)
+                x_pixels = int(x_dist // x_incr) + 1
+                y_pixels = int(y_dist // y_incr) + 1
+                real_x_dist = x_incr * (x_pixels-1)
+                real_y_dist = y_incr * (y_pixels-1)
+                total = int(x_pixels * y_pixels)
+
+    with col6:
+        with st.container(border=True): 
+            st.write("True scan distance X (µm):", real_x_dist, "True scan distance Y (µm):", real_y_dist)
+            st.write(x_pixels, " X pixels", y_pixels, "Y pixels", total, "pixels in total")
+            returntostart = st.checkbox("Return to starting position after run")
 
     # ─────────────────────────────────────────────
     # SUBMIT PARAMETERS
