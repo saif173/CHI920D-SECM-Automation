@@ -1,6 +1,5 @@
-import io
+
 import streamlit as st
-import pandas as pd
 from file_parser import parse_file_st
 from process_pac_data import normalize_data, flip_data
 from pac_plotting import plot

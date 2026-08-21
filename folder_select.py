@@ -7,6 +7,7 @@ import streamlit as st
 
 
 def folder_picker(label="Output folder"):
+    """Uses tkinter to allow the user to select a folder"""
 
     if "selected_folder" not in st.session_state:
         st.session_state.selected_folder = ""

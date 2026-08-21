@@ -4,6 +4,7 @@ import pandas as pd
 import io
 
 def parse_file(filename):
+    """Extracts column data from a given .txt or .csv file"""
     with open(filename, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()
 
@@ -33,6 +34,7 @@ def parse_file(filename):
     return L_data, I_data
 
 def parse_file_st(uploaded_file):
+    """Extracts column data from uploaded file, on streamlit"""
     lines = uploaded_file.getvalue().decode("utf-8").splitlines()
 
     data_lines = []

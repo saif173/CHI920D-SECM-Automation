@@ -1,8 +1,8 @@
-import numpy as np
+
 import matplotlib.pyplot as plt
-import streamlit as st
 
 def show_position_grid(xdist, ydist):
+    """Creates an image which responds to user inputs, mapping out the positions used for sample leveling"""
 
     fig, ax = plt.subplots()
 

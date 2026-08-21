@@ -248,6 +248,7 @@ def secm_commands(parameters):
     return commands
 
 def run_chi_macro(macro_commands):
+    """Creates a .mcr file using the given commands, and instructs the chi920d.exe software to run it"""
 
     chi_exe = r"C:\chi\chi920d.exe"
     macro_file = PROJECT_DIR / "macro_files" / "test.mcr"

@@ -1,14 +1,12 @@
-import os
-import subprocess
 import traceback
 import numpy as np
 import matplotlib.pyplot as plt
 from pac_analysis.file_parser import parse_file
-from pac_analysis.pac_curve_fit import find_k_deluxe_shift, find_k_deluxe
-from pac_analysis.process_pac_data import flip_data
+from pac_analysis.pac_curve_fit import find_k_deluxe
 from pathlib import Path
 
 def k_map(folder, rg, a, zero_point):
+    """Processes data at folder location, and creates an dictionary that maps coordinates to k-values"""
 
     folder = Path(folder)
     files = sorted(folder.glob("*.txt"))
@@ -54,6 +52,7 @@ def k_map(folder, rg, a, zero_point):
     return k_values, xincr, yincr
 
 def plot_k_map(k_values, xincr, yincr):
+    """Creates a 2D colour map of k-values"""
 
     xmax = max(x for x, y in k_values)
     ymax = max(y for x, y in k_values)
