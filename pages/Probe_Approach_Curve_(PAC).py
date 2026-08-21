@@ -297,21 +297,21 @@ if mode == "Touch-point PAC Analyser":
     
    
         if (a > 0) & (rg >0) & (touch_point is not None) & (i_infi is not None):
-            rel_L, rel_I = normalize_data(L_data, I_data, touch_point, a, i_infi)
+            rel_L, rel_I, rel_L2, rel_I2 = normalize_data(L_data, I_data, touch_point, a, i_infi)
 
             k=find_k_deluxe(L_data, I_data, rg, a, touch_point)
-            pred = model(rel_L,k,rg) 
-            rmse = rms_error(rel_I,pred)
+            pred = model(rel_L2,k,rg) 
+            rmse = rms_error(rel_I2,pred)
         
 
             #define and show plots
             fig2 = plot(rel_L, rel_I, "Normalized Distance", 
                 "Normalized Current", "Normalized PAC curve")
-            fig3 = plot_model(rel_L, rel_I, k,rg)
+            fig3 = plot_model(rel_L2, rel_I2, k,rg)
             st.plotly_chart(fig2)
 
             data = "Normalised Distance\tNormalised Current\n" + "\n".join(
-                        f"{L}\t{I}" for L, I in zip(rel_L, rel_I))
+                        f"{L:.3f}\t{I:.3f}" for L, I in zip(rel_L, rel_I))
             
             st.download_button(label="Download normalized data",
                         data=data,

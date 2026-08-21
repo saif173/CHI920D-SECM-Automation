@@ -20,12 +20,15 @@ def normalize_data(L_data, I_data, touch_point, a, I_infinity):
     """Normalises data based on touch-point (zero-point) and bulk-current (I-infinity)"""
     rel_L =(L_data - touch_point) / a
     rel_I = (I_data/I_infinity)
-    mask= (rel_L>0)&(rel_L<5) #sets range of 0 to 5 for the normalised curve. removes x=0 to avoid numerical instability
-    rel_L=rel_L[mask]
-    rel_I=rel_I[mask]
-    
-    return rel_L, rel_I
+    mask1 = (rel_L>0)
+    rel_L = rel_L[mask1]
+    rel_I = rel_I[mask1]
 
+    mask2= (rel_L>0)&(rel_L<5) #sets range of 0 to 5 for the normalised curve. removes x=0 to avoid numerical instability
+    rel_L_2=rel_L[mask2]
+    rel_I_2=rel_I[mask2]
+    
+    return rel_L, rel_I, rel_L_2, rel_I_2
 
 
         

@@ -85,8 +85,8 @@ def find_i_infi(L_data, I_data, touch_point, a, rg):
 def find_k_deluxe(L_data, I_data, rg , a, zero_point):
     """Finds k given the raw L and I data"""
     i_infi = find_i_infi(L_data,I_data,zero_point,a,rg)
-    rel_L, rel_I = normalize_data(L_data, I_data, zero_point, a, i_infi)
-    k = find_k(rel_L, rel_I,rg)
+    rel_L, rel_I, rel_L2, rel_I2 = normalize_data(L_data, I_data, zero_point, a, i_infi)
+    k = find_k(rel_L2, rel_I2,rg)
     
     return k
 
