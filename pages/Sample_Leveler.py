@@ -21,7 +21,7 @@ if "pagenum" not in st.session_state:
     st.session_state.pagenum = 1
 
 st.set_page_config(
-    page_title="K-Map",
+    page_title="Sample Leveler",
     layout="wide"
 )
 
@@ -43,7 +43,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Position Leveler")
+st.title("Sample Leveler")
 
 
 st.caption("Configure the PAC Parameters")
@@ -252,9 +252,9 @@ if st.button(
 
 if "pl_parameters" in st.session_state:
 
-            if st.button("⚙ Run Position Leveling", use_container_width=True
+            if st.button("⚙ Run Sample Leveling", use_container_width=True
                             ):
-                with st.spinner("Running position leveling..."):
+                with st.spinner("Running sample leveling..."):
 
 
                     run_chi_macro(
