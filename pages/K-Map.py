@@ -203,8 +203,8 @@ if mode == "Run Mapping":
                              placeholder="Open the chi920d.exe program to set initial z-coordinate")
                 x_dist = st.number_input("X-length (µm)", value =100.0, min_value=0.0)
                 y_dist = st.number_input("Y-length (µm)", value =100.0, min_value=0.0)
-                x_incr = st.number_input("Increment in x (µm)", value=10.0, min_value=0.0, max_value=1000.0)
-                y_incr = st.number_input("Increment in y (µm)" , value = 10.0, min_value=0.0, max_value=1000.0)
+                x_incr = st.number_input("Increment in x (µm)", value=10, min_value=0, max_value=4000)
+                y_incr = st.number_input("Increment in y (µm)" , value = 10, min_value=0, max_value=4000)
                 x_pixels = int(x_dist // x_incr) + 1
                 y_pixels = int(y_dist // y_incr) + 1
                 real_x_dist = x_incr * (x_pixels-1)
