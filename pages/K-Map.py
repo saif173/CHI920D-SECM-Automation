@@ -210,12 +210,13 @@ if mode == "Run Mapping":
                 real_x_dist = x_incr * (x_pixels-1)
                 real_y_dist = y_incr * (y_pixels-1)
                 total = int(x_pixels * y_pixels)
+                returntostart = st.checkbox("Return to starting position after run")
 
     with col6:
         with st.container(border=True): 
             st.write("True scan distance X (µm):", real_x_dist, "True scan distance Y (µm):", real_y_dist)
             st.write(x_pixels, " X pixels", y_pixels, "Y pixels", total, "pixels in total")
-            returntostart = st.checkbox("Return to starting position after run")
+            
 
     # ─────────────────────────────────────────────
     # SUBMIT PARAMETERS

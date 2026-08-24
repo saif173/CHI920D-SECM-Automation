@@ -202,6 +202,7 @@ col5,col6 = st.columns(2)
 with col5:
     with st.container(border=True):
         st.subheader("Leveling parameters")
+        st.caption("First move probe to position 1, the top left edge of sample (use chi920d.exe)")
         initialz = st.number_input("Initial Z coordinate (check chi920d.exe software)", 
                            value=17000, min_value=0, max_value=25000)
         xdist = st.number_input("X-distance travelled to position 2 (µm)", value=1000.0, 
