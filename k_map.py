@@ -6,7 +6,8 @@ from pac_analysis.pac_curve_fit import find_k_deluxe
 from pathlib import Path
 
 def k_map(folder, rg, a, zero_point):
-    """Processes data at folder location, and creates an dictionary that maps coordinates to k-values"""
+    """Processes data at folder location, and creates an dictionary 
+    that maps coordinates to k-values"""
 
     folder = Path(folder)
     files = sorted(folder.glob("*.txt"))
@@ -17,8 +18,11 @@ def k_map(folder, rg, a, zero_point):
         print(f"\nProcessing {file.name}")
 
         try:
-            L_data, I_data = parse_file(str(file))
 
+            #Extracts data from each PAC file
+            L_data, I_data = parse_file(str(file)) 
+
+            #For troubleshooting (open Powershell to see)
             print("Number of L points:", len(L_data))
             print("Number of I points:", len(I_data))
 
@@ -26,7 +30,8 @@ def k_map(folder, rg, a, zero_point):
                 print("SKIPPED: empty file")
                 continue
 
-            k = find_k_deluxe(
+            #Find k
+            k = find_k_deluxe( 
                 L_data,
                 I_data,
                 rg,
@@ -36,15 +41,19 @@ def k_map(folder, rg, a, zero_point):
 
             print("k =", k)
 
+            #Each file will be named pos_x_y_xincr_yincr
+            #They are extracted from the filename
             parts = file.stem.split("_")
-            x = int(parts[-4])
-            y = int(parts[-3])
-            xincr = int(parts[-2])
-            yincr = int(parts[-1])
+            x = int(parts[-4]) 
+            y = int(parts[-3]) 
+            xincr = int(parts[-2]) 
+            yincr = int(parts[-1]) 
 
-            k_values[(x*xincr, y*yincr)] = k
+            #Assigns k to the x and y coordinates in um
+            k_values[(x*xincr, y*yincr)] = k 
 
-        except Exception as e:
+        #For troubleshooting (open Powershell)
+        except Exception as e:  
             print(f"FAILED: {file.name}")
             print(e)
             traceback.print_exc()
@@ -54,18 +63,21 @@ def k_map(folder, rg, a, zero_point):
 def plot_k_map(k_values, xincr, yincr):
     """Creates a 2D colour map of k-values"""
 
-    xmax = max(x for x, y in k_values)
-    ymax = max(y for x, y in k_values)
-    xmax_i = int(xmax/xincr)
-    ymax_i = int(xmax/yincr)
+    xmax = max(x for x, y in k_values) #finds max x distance
+    ymax = max(y for x, y in k_values) #finds max y distance
+    xmax_i = int(xmax/xincr) #finds size of x list
+    ymax_i = int(ymax/yincr) #size of y list
 
-    k_array = np.full((ymax_i + 1, xmax_i + 1), np.nan)
+    #Creates an empty matrix
+    k_array = np.full((ymax_i + 1, xmax_i + 1), np.nan) 
 
-    for (x, y), k in k_values.items():
-        k_array[int(y/yincr), int(x/xincr)] = k
+    #Assigns each matrix element to a 'k'
+    for (x, y), k in k_values.items():  
+        k_array[int(y/yincr), int(x/xincr)] = k 
 
 
-    fig, ax = plt.subplots()
+    #Creates plot
+    fig, ax = plt.subplots()  
 
     im = ax.imshow(
         k_array,

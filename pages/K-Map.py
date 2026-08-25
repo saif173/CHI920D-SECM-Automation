@@ -300,7 +300,7 @@ if mode == "Plot K-Map":
 
                 else:
 
-                    with st.spinner("Running K-map..."):
+                    with st.spinner("Creating K-map (approx 1 second for each pixel)..."):
                         k_values, xincr, yincr = k_map(output_folder, rg, a, 0)
 
                         # Store results in session state

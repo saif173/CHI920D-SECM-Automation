@@ -21,7 +21,7 @@ def k_map_commands(parameters):
             # Run PAC
             commands += pac_commands(parameters)
 
-            # Save result
+            # Save result as pos_xcoord_ycoord_xincr_yincr
             commands += [
             f"folder:{parameters['output_folder']}",
             f"tsave:pos_{x}_{y}_{int(parameters['xincr'])}_{int(parameters['yincr'])}", 
@@ -248,10 +248,10 @@ def run_chi_macro(macro_commands):
     """Creates a .mcr file using the given commands, and instructs the chi920d.exe software to run it"""
 
     chi_exe = r"C:\chi\chi920d.exe"
-    macro_file = PROJECT_DIR / "macro_files" / "test.mcr"
+    macro_file = PROJECT_DIR / "macro_files" / "test.mcr" #creates empty .mcr file
     
     with open(PROJECT_DIR / "macro_files" / "test.mcr", "wb") as f:
-        f.write(b"\xff\xff\x01\x00")
+        f.write(b"\xff\xff\x01\x00") #determines maximum length of file
         f.write("\r\n".join(macro_commands).encode("ascii"))
 
     # run the subprocess using the variables
