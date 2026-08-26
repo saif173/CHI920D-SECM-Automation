@@ -110,7 +110,7 @@ def pure_pac_commands(parameters):
         f"iabs:{parameters['current_abs']}",
         f"maxincr:{parameters['max_incr']}",
         f"withdraw:{parameters['withdraw']}",
-        f"incrtime:{parameters['incrtime']}",
+        f"incrtime:{parameters['incrtime']}"
         ]
     if parameters['epon'] == True:
         commands.append("epon")
