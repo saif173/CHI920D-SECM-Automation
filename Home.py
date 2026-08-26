@@ -29,7 +29,8 @@ st.title("CHI 920D Automation")
 
 st.subheader("Introduction")
 st.write("This program grants the user the ability to perform extra " \
-"functions using the CHI 920D Scanning Electrochemical Microscope. It acts as an extension to the chi920d.exe software, providing automation for tedious tasks.")
+"functions using the CHI 920D Scanning Electrochemical Microscope. It acts as an extension to the chi920d.exe software, providing automation for tedious tasks." \
+"This page intends to act as a brief guide to the software, but there are more detailed guides available.")
 
 st.subheader("General Information")
 st.write("As previously mentioned, this software depends on the existing chi920d.exe software to operate. Before running any methods using this software, ensure that the chi920d.exe is closed. " \
@@ -49,6 +50,7 @@ if selection == "Sample Leveler":
     st.write("For this method to be effective, the user must first use the chi920d.exe software to move the probe close to the left edge of the sample, on the same horizontal line as the back two screws.")
 
     st.write("The user should adjust the scan positions carefully, with the guidance of the provided grid.")
+    st.write("Important: Ensure that there is an empty folder called pos_level in the main software folder. This is required to hold the data for the three positions.")
 
 if selection == "K-Map":
     st.write("This method creates a 2D colour map of k-values by scanning a certain region of the sample.")
