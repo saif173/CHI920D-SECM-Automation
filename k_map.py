@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pac_analysis.file_parser import parse_file
 from pac_analysis.pac_curve_fit import find_k_deluxe
+from pac_analysis.process_pac_data import flip_data
+
 from pathlib import Path
 
 def k_map(folder, rg, a, zero_point):
@@ -20,7 +22,8 @@ def k_map(folder, rg, a, zero_point):
         try:
 
             #Extracts data from each PAC file
-            L_data, I_data = parse_file(str(file)) 
+            L_data, I_data = parse_file(str(file))
+            L_data = flip_data(L_data)
 
             #For troubleshooting (open Powershell to see)
             print("Number of L points:", len(L_data))
