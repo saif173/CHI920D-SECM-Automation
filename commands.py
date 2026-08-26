@@ -76,7 +76,6 @@ def pac_commands(parameters):
         f"maxincr:{parameters['max_incr']}",
         f"withdraw:0.0",
         f"incrtime:{parameters['incrtime']}",
-        f"qt:5"
         ]
     if parameters['epon'] == True:
         commands.append("epon")
