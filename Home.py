@@ -25,7 +25,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("CHI 920D Extra Functions")
+st.title("CHI 920D Automation")
 
 st.subheader("Introduction")
 st.write("This program grants the user the ability to perform extra " \
