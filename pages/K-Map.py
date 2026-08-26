@@ -56,7 +56,7 @@ if mode == "Run Mapping":
                     "Probe potential (V)",
                     min_value=-10.0,
                     max_value=10.0,
-                    value=0.0,
+                    value=0.5,
                     step=0.1,
                     key="pac_probe_pot"
                 )
