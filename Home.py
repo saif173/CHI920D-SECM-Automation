@@ -30,7 +30,7 @@ st.title("CHI 920D Automation")
 st.subheader("Introduction")
 st.write("This program grants the user the ability to perform extra " \
 "functions using the CHI 920D Scanning Electrochemical Microscope. It acts as an extension to the chi920d.exe software, providing automation for tedious tasks." \
-"This page intends to act as a brief guide to the software, but there are more detailed guides available. Go to the main program folder -> DOCUMENTATION and there will be two PDF documents, a software guide and a code explanation.")
+" This page intends to act as a brief guide to the software, but there are more detailed guides available. Go to the main program folder -> DOCUMENTATION and there will be two PDF documents, a software guide and a code explanation.")
 
 st.subheader("General Information")
 st.write("As previously mentioned, this software depends on the existing chi920d.exe software to operate. Before running any methods using this software, ensure that the chi920d.exe is closed. " \
