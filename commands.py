@@ -13,7 +13,8 @@ PROJECT_DIR = Path(__file__).resolve().parent
 def k_map_commands(parameters):
     commands = []
 
-    commands = commands + [f"zgoto:{parameters['initialz']}", f"y:-10", f"y:10"]
+    commands = commands + [f"zgoto:{parameters['initialz']}", f"y:{-1*parameters['yincr']}", 
+                           f"y:{parameters['yincr']}"]
 
     for y in range(int(parameters['ydist']//parameters['yincr'])+1):
         for x in range(int(parameters['xdist']//parameters['xincr'])+1):
