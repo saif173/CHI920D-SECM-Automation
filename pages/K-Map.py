@@ -7,6 +7,7 @@ from folder_select import folder_picker
 
 from commands import run_chi_macro, k_map_commands
 from k_map import k_map, plot_k_map
+from image import show_k_map_region
 
 
 st.set_page_config(
@@ -216,6 +217,8 @@ if mode == "Run Mapping":
         with st.container(border=True): 
             st.write("True scan distance X (µm):", real_x_dist, "True scan distance Y (µm):", real_y_dist)
             st.write(x_pixels, " X pixels", y_pixels, "Y pixels", total, "pixels in total")
+            fig = show_k_map_region(real_x_dist,real_y_dist,x_incr,y_incr)
+            st.pyplot(fig)
             
 
     # ─────────────────────────────────────────────
