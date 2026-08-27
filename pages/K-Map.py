@@ -200,7 +200,7 @@ if mode == "Run Mapping":
             with st.container(border=True):
                 st.subheader("Scan parameters")
                 initial_z=st.number_input("Initial Z-coordinate (check chi920d.exe software)", value=17000.0, 
-                             min_value=100.0, max_value=25000.0, 
+                             min_value=0.0, max_value=25000.0, 
                              placeholder="Open the chi920d.exe program to set initial z-coordinate")
                 x_dist = st.number_input("X-length (µm)", value =100.0, min_value=0.0)
                 y_dist = st.number_input("Y-length (µm)", value =100.0, min_value=0.0)
